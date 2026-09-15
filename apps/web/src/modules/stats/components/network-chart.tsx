@@ -27,7 +27,7 @@ export const NetworkChart = ({ network, history }: NetworkChartProps) => {
           </div>
           <div className="flex gap-2 text-xs text-muted-foreground">
             <span className="rounded-full bg-muted px-2.5 py-1">Últimos 5 minutos</span>
-            <span className="rounded-full bg-muted px-2.5 py-1">Actualiza cada 2 s</span>
+            <span className="rounded-full bg-muted px-2.5 py-1">Actualiza cada 5 s</span>
           </div>
         </div>
       </CardHeader>
@@ -56,8 +56,8 @@ export const NetworkChart = ({ network, history }: NetworkChartProps) => {
               <YAxis tickFormatter={(value) => formatBytes(Number(value), 0)} stroke="currentColor" className="text-muted-foreground" tick={{ fontSize: 11 }} tickLine={false} axisLine={false} width={52} />
               <Tooltip formatter={(value: unknown) => formatRate(Number(value ?? 0))} />
               <Legend />
-              <Line type="monotone" dataKey="received" name="Descarga" stroke="#0ea5e9" strokeWidth={2.5} dot={false} connectNulls />
-              <Line type="monotone" dataKey="transmitted" name="Subida" stroke="#8b5cf6" strokeWidth={2.5} dot={false} connectNulls />
+              <Line type="monotone" dataKey="received" name="Descarga" stroke="#0ea5e9" strokeWidth={2.5} dot={{ r: 3 }} connectNulls />
+              <Line type="monotone" dataKey="transmitted" name="Subida" stroke="#8b5cf6" strokeWidth={2.5} dot={{ r: 3 }} connectNulls />
             </LineChart>
           </ResponsiveContainer>
         </div>

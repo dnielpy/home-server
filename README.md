@@ -11,7 +11,7 @@ pnpm dev
 
 Abre [http://localhost:3000](http://localhost:3000). Para ejecutar el frontend fuera de Compose, configura `API_URL=http://localhost:3001`.
 
-El frontend ejecuta sus servicios server-side contra la API de Nest; el navegador no consume directamente la API de estadísticas. Nest consulta `systeminformation` y PostgreSQL conserva las muestras crudas durante 30 días.
+El frontend ejecuta sus servicios server-side contra la API de Nest; el navegador no consume directamente la API de estadísticas. La API consulta `systeminformation` para CPU, RAM y velocidad de red en cada lectura, guarda una muestra en PostgreSQL cada 5 minutos y el frontend vuelve a leer el estado cada 5 segundos. El acumulado de tráfico de red se mantiene en PostgreSQL —incluidos los reinicios del contenedor— y las muestras crudas se conservan durante 30 días.
 
 ## Docker
 

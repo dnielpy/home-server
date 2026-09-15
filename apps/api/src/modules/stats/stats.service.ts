@@ -4,7 +4,7 @@ import type { NetworkHistoryResponse, StatsLiveResponse } from "@home-server/con
 import { StatsRepository } from "./stats.repository";
 import { SystemMetricsService } from "./system-metrics.service";
 
-const SAMPLE_INTERVAL_MS = 2_000;
+const SAMPLE_INTERVAL_MS = 5 * 60 * 1_000;
 const LIVE_HISTORY_MS = 5 * 60 * 1_000;
 const WEEKLY_HISTORY_MS = 7 * 24 * 60 * 60 * 1_000;
 const RETENTION_MS = 30 * 24 * 60 * 60 * 1_000;
@@ -33,7 +33,7 @@ export class StatsService implements OnModuleInit {
 
     this.collecting = true;
     try {
-      await this.statsRepository.insert(await this.systemMetricsService.collect());
+      await this.statsRepository.persist(await this.systemMetricsService.collect());
     } catch (error) {
       this.logger.error("Unable to collect and persist system metrics.", error instanceof Error ? error.stack : undefined);
     } finally {
@@ -47,12 +47,34 @@ export class StatsService implements OnModuleInit {
   }
 
   public async getLive(): Promise<StatsLiveResponse> {
-    const current = await this.statsRepository.findLatest();
-    if (!current) throw new ServiceUnavailableException("No system metrics have been collected yet.");
+    const persisted = await this.statsRepository.findLatest();
+    if (!persisted) throw new ServiceUnavailableException("No system metrics have been collected yet.");
+
+    let current = persisted;
+    try {
+      const live = await this.systemMetricsService.collect();
+      current = {
+        ...live,
+        network: {
+          ...live.network,
+          receivedBytes: persisted.network.receivedBytes,
+          transmittedBytes: persisted.network.transmittedBytes,
+        },
+      };
+    } catch (error) {
+      this.logger.warn(`Unable to read live system metrics; returning the last persisted sample. ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+
+    const networkHistory = await this.statsRepository.findNetworkHistory(new Date(Date.now() - LIVE_HISTORY_MS));
+    networkHistory.push({
+      timestamp: current.updatedAt,
+      received: current.network.receiveRate,
+      transmitted: current.network.transmitRate,
+    });
 
     return {
       current,
-      networkHistory: await this.statsRepository.findNetworkHistory(new Date(Date.now() - LIVE_HISTORY_MS)),
+      networkHistory,
     };
   }
 

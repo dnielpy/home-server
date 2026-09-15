@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getLiveStats, getWeeklyNetworkHistory } from "@/src/lib/services/stats";
 import type { NetworkHistoryPoint, StatsLiveResponse } from "@home-server/contracts/stats";
 
-const LIVE_POLL_INTERVAL_MS = 2_000;
+const LIVE_POLL_INTERVAL_MS = 5_000;
 const HISTORY_POLL_INTERVAL_MS = 15 * 60 * 1_000;
 
 type UseStatsPollingInput = {

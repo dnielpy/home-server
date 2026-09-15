@@ -1,0 +1,252 @@
+{
+  "id": "7cee7a3b-6cf5-49fe-86a8-b24713851bb4",
+  "prevId": "39ec7c3a-6d48-4b73-a928-a49d24437254",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.network_totals": {
+      "name": "network_totals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "interface_name": {
+          "name": "interface_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_received_bytes": {
+          "name": "last_received_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_transmitted_bytes": {
+          "name": "last_transmitted_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_received_bytes": {
+          "name": "total_received_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_transmitted_bytes": {
+          "name": "total_transmitted_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.stats": {
+      "name": "stats",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "stats_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "9223372036854775807",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "recorded_at": {
+          "name": "recorded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cpu_used": {
+          "name": "cpu_used",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cpu_idle": {
+          "name": "cpu_idle",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memory_total": {
+          "name": "memory_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memory_used": {
+          "name": "memory_used",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memory_available": {
+          "name": "memory_available",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memory_percent_used": {
+          "name": "memory_percent_used",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "system_storage_mount": {
+          "name": "system_storage_mount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "system_storage_total": {
+          "name": "system_storage_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "system_storage_used": {
+          "name": "system_storage_used",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "system_storage_available": {
+          "name": "system_storage_available",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "system_storage_percent_used": {
+          "name": "system_storage_percent_used",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_storage_mount": {
+          "name": "external_storage_mount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_storage_total": {
+          "name": "external_storage_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_storage_used": {
+          "name": "external_storage_used",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_storage_available": {
+          "name": "external_storage_available",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_storage_percent_used": {
+          "name": "external_storage_percent_used",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "network_interface_name": {
+          "name": "network_interface_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "network_received_bytes": {
+          "name": "network_received_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "network_transmitted_bytes": {
+          "name": "network_transmitted_bytes",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "network_receive_rate": {
+          "name": "network_receive_rate",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "network_transmit_rate": {
+          "name": "network_transmit_rate",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "stats_recorded_at_index": {
+          "name": "stats_recorded_at_index",
+          "columns": [
+            {
+              "expression": "recorded_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

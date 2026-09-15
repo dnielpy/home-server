@@ -1,4 +1,14 @@
-import { bigint, index, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, index, integer, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+
+export const networkTotals = pgTable("network_totals", {
+  id: integer("id").primaryKey(),
+  interfaceName: text("interface_name"),
+  lastReceivedBytes: bigint("last_received_bytes", { mode: "number" }).notNull(),
+  lastTransmittedBytes: bigint("last_transmitted_bytes", { mode: "number" }).notNull(),
+  totalReceivedBytes: bigint("total_received_bytes", { mode: "number" }).notNull(),
+  totalTransmittedBytes: bigint("total_transmitted_bytes", { mode: "number" }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull(),
+});
 
 export const stats = pgTable("stats", {
   id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
