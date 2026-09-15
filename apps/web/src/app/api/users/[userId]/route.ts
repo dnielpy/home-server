@@ -16,7 +16,11 @@ const mapUser = (payload: { user: { id: string; photoUrl: string | null } }) => 
 export async function PATCH(request: Request, context: Context) {
   if (!hasValidOrigin(request)) return NextResponse.json({ error: "Origen no válido." }, { status: 403 });
   const { userId } = await context.params;
-  const response = await apiFetch(`/v1/users/${userId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(await request.json().catch(() => null)) });
+  const response = await apiFetch(`/v1/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(await request.json().catch(() => null)),
+  });
   const payload = await response.json().catch(() => ({ error: "No se pudo actualizar el usuario." }));
   if (!response.ok) return NextResponse.json(payload, { status: response.status });
   return NextResponse.json(mapUser(userResponseSchema.parse(payload)));

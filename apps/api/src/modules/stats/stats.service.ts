@@ -37,7 +37,10 @@ export class StatsService implements OnModuleInit {
     try {
       await this.statsRepository.persist(await this.systemMetricsService.collect());
     } catch (error) {
-      this.logger.error("Unable to collect and persist system metrics.", error instanceof Error ? error.stack : undefined);
+      this.logger.error(
+        "Unable to collect and persist system metrics.",
+        error instanceof Error ? error.stack : undefined,
+      );
     } finally {
       this.collecting = false;
     }
@@ -64,7 +67,9 @@ export class StatsService implements OnModuleInit {
         },
       };
     } catch (error) {
-      this.logger.warn(`Unable to read live system metrics; returning the last persisted sample. ${error instanceof Error ? error.message : "Unknown error"}`);
+      this.logger.warn(
+        `Unable to read live system metrics; returning the last persisted sample. ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
 
     const networkHistory = await this.statsRepository.findNetworkHistory(new Date(Date.now() - LIVE_HISTORY_MS));

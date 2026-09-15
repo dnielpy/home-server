@@ -18,16 +18,18 @@ export const NetworkChart = ({ network, history }: NetworkChartProps) => {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 id="network-title" className="flex items-center gap-2 text-base font-semibold">
-              <Network aria-hidden="true" className="size-4 text-primary" />
+              <Network aria-hidden="true" className="text-primary size-4" />
               Tráfico de red
             </h2>
             <CardDescription className="mt-1">
-              {network.interfaceName ? `Interfaz predeterminada: ${network.interfaceName}` : "No hay una interfaz de red predeterminada disponible."}
+              {network.interfaceName
+                ? `Interfaz predeterminada: ${network.interfaceName}`
+                : "No hay una interfaz de red predeterminada disponible."}
             </CardDescription>
           </div>
-          <div className="flex gap-2 text-xs text-muted-foreground">
-            <span className="rounded-full bg-muted px-2.5 py-1">Últimos 5 minutos</span>
-            <span className="rounded-full bg-muted px-2.5 py-1">Actualiza cada 5 s</span>
+          <div className="text-muted-foreground flex gap-2 text-xs">
+            <span className="bg-muted rounded-full px-2.5 py-1">Últimos 5 minutos</span>
+            <span className="bg-muted rounded-full px-2.5 py-1">Actualiza cada 5 s</span>
           </div>
         </div>
       </CardHeader>
@@ -38,26 +40,61 @@ export const NetworkChart = ({ network, history }: NetworkChartProps) => {
               <ArrowDownToLine aria-hidden="true" className="size-3.5" /> Descarga actual
             </p>
             <p className="mt-1 text-xl font-bold">{formatRate(network.receiveRate)}</p>
-            <p className="mt-1 text-xs text-muted-foreground">Total: {formatBytes(network.receivedBytes)}</p>
+            <p className="text-muted-foreground mt-1 text-xs">Total: {formatBytes(network.receivedBytes)}</p>
           </div>
           <div className="rounded-xl bg-violet-500/10 p-3">
             <p className="flex items-center gap-1.5 text-xs font-semibold text-violet-700 dark:text-violet-300">
               <ArrowUpFromLine aria-hidden="true" className="size-3.5" /> Subida actual
             </p>
             <p className="mt-1 text-xl font-bold">{formatRate(network.transmitRate)}</p>
-            <p className="mt-1 text-xs text-muted-foreground">Total: {formatBytes(network.transmittedBytes)}</p>
+            <p className="text-muted-foreground mt-1 text-xs">Total: {formatBytes(network.transmittedBytes)}</p>
           </div>
         </div>
         <div className="mt-5 h-72" aria-label="Gráfica de velocidad de red">
           <ResponsiveContainer height="100%" width="100%">
             <LineChart data={history} margin={{ top: 8, right: 8, left: 4, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-border" />
-              <XAxis dataKey="timestamp" minTickGap={28} tickFormatter={(value) => new Date(String(value)).toLocaleTimeString("es-ES", { minute: "2-digit", second: "2-digit" })} stroke="currentColor" className="text-muted-foreground" tick={{ fontSize: 11 }} tickLine={false} axisLine={false} />
-              <YAxis tickFormatter={(value) => formatBytes(Number(value), 0)} stroke="currentColor" className="text-muted-foreground" tick={{ fontSize: 11 }} tickLine={false} axisLine={false} width={52} />
+              <XAxis
+                dataKey="timestamp"
+                minTickGap={28}
+                tickFormatter={(value) =>
+                  new Date(String(value)).toLocaleTimeString("es-ES", { minute: "2-digit", second: "2-digit" })
+                }
+                stroke="currentColor"
+                className="text-muted-foreground"
+                tick={{ fontSize: 11 }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                tickFormatter={(value) => formatBytes(Number(value), 0)}
+                stroke="currentColor"
+                className="text-muted-foreground"
+                tick={{ fontSize: 11 }}
+                tickLine={false}
+                axisLine={false}
+                width={52}
+              />
               <Tooltip formatter={(value: unknown) => formatRate(Number(value ?? 0))} />
               <Legend />
-              <Line type="monotone" dataKey="received" name="Descarga" stroke="#0ea5e9" strokeWidth={2.5} dot={{ r: 3 }} connectNulls />
-              <Line type="monotone" dataKey="transmitted" name="Subida" stroke="#8b5cf6" strokeWidth={2.5} dot={{ r: 3 }} connectNulls />
+              <Line
+                type="monotone"
+                dataKey="received"
+                name="Descarga"
+                stroke="#0ea5e9"
+                strokeWidth={2.5}
+                dot={{ r: 3 }}
+                connectNulls
+              />
+              <Line
+                type="monotone"
+                dataKey="transmitted"
+                name="Subida"
+                stroke="#8b5cf6"
+                strokeWidth={2.5}
+                dot={{ r: 3 }}
+                connectNulls
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>

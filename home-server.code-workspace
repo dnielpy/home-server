@@ -1,23 +1,23 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../streamlt"
-		},
-		{
-			"path": "../video-downloader"
-		},
-		{
-			"path": "../lgallery"
-		},
-		{
-			"path": "../ubuntu-server-dashboard"
-		},
-		{
-			"path": "../avangenio/etravelbeyond-frontend"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "path": "../streamlt",
+    },
+    {
+      "path": "../video-downloader",
+    },
+    {
+      "path": "../lgallery",
+    },
+    {
+      "path": "../ubuntu-server-dashboard",
+    },
+    {
+      "path": "../avangenio/etravelbeyond-frontend",
+    },
+  ],
+  "settings": {},
 }

@@ -1,4 +1,16 @@
-import { BadRequestException, Body, Controller, Delete, Get, Inject, Param, Patch, Post, StreamableFile, UseGuards } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post,
+  StreamableFile,
+  UseGuards,
+} from "@nestjs/common";
 import { userResponseSchema, usersResponseSchema } from "@home-server/contracts";
 import { AdminGuard, AuthGuard } from "../auth/auth.guard";
 import { parsePhotoData } from "../storage/user-storage.service";
@@ -24,7 +36,9 @@ export class UsersController {
     if (typeof body?.name !== "string" || typeof body.password !== "string") {
       throw new BadRequestException("Nombre y contraseña son obligatorios.");
     }
-    return userResponseSchema.parse({ user: await this.usersService.create(body.name, body.password, parsePhotoData(body.photoData)) });
+    return userResponseSchema.parse({
+      user: await this.usersService.create(body.name, body.password, parsePhotoData(body.photoData)),
+    });
   }
 
   @Patch(":id")

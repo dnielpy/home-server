@@ -1,12 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { RestFactory } from "@home-server/core/http";
 import { bootstrapRest } from "@/src/lib/http/bootstrap-rest";
-import {
-  createUser,
-  deleteUser,
-  getUsers,
-  updateUser,
-} from "@/src/lib/services/users";
+import { createUser, deleteUser, getUsers, updateUser } from "@/src/lib/services/users";
 
 const apiUser = {
   id: "9a6fc693-6f5e-4b24-8f51-f2d898efe5d6",
@@ -28,10 +23,30 @@ describe("users service", () => {
     vi.stubEnv("API_URL", "http://api.internal:3001");
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(new Response(JSON.stringify({ users: [apiUser] }), { status: 200, headers: { "content-type": "application/json" } }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ user: apiUser }), { status: 201, headers: { "content-type": "application/json" } }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ user: apiUser }), { status: 200, headers: { "content-type": "application/json" } }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ user: apiUser }), { status: 200, headers: { "content-type": "application/json" } }));
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ users: [apiUser] }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ user: apiUser }), {
+          status: 201,
+          headers: { "content-type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ user: apiUser }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ user: apiUser }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      );
     vi.stubGlobal("fetch", fetchMock);
     bootstrapRest();
 
@@ -45,7 +60,9 @@ describe("users service", () => {
       ],
     });
     await expect(createUser({ name: "María", password: "password-segura" })).resolves.toMatchObject({ success: true });
-    await expect(updateUser(apiUser.id, { name: "María 2", removePhoto: true })).resolves.toMatchObject({ success: true });
+    await expect(updateUser(apiUser.id, { name: "María 2", removePhoto: true })).resolves.toMatchObject({
+      success: true,
+    });
     await expect(deleteUser(apiUser.id)).resolves.toMatchObject({ success: true });
 
     expect(fetchMock.mock.calls.map(([url]) => url.toString())).toEqual([
@@ -54,11 +71,6 @@ describe("users service", () => {
       `http://api.internal:3001/v1/users/${apiUser.id}`,
       `http://api.internal:3001/v1/users/${apiUser.id}`,
     ]);
-    expect(fetchMock.mock.calls.map(([, init]) => init.method)).toEqual([
-      "GET",
-      "POST",
-      "PATCH",
-      "DELETE",
-    ]);
+    expect(fetchMock.mock.calls.map(([, init]) => init.method)).toEqual(["GET", "POST", "PATCH", "DELETE"]);
   });
 });

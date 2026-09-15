@@ -17,9 +17,14 @@ export async function POST(request: Request) {
     body: JSON.stringify(parsed.data),
     cache: "no-store",
   });
-  if (!response.ok) return NextResponse.json({ error: "Usuario o contraseña incorrectos." }, { status: response.status === 401 ? 401 : 500 });
+  if (!response.ok)
+    return NextResponse.json(
+      { error: "Usuario o contraseña incorrectos." },
+      { status: response.status === 401 ? 401 : 500 },
+    );
   const result = loginResponseSchema.safeParse(await response.json());
-  if (!result.success) return NextResponse.json({ error: "La respuesta de autenticación no es válida." }, { status: 502 });
+  if (!result.success)
+    return NextResponse.json({ error: "La respuesta de autenticación no es válida." }, { status: 502 });
 
   const nextResponse = NextResponse.json({ user: result.data.user });
   const forwardedProtocol = request.headers.get("x-forwarded-proto")?.split(",")[0].trim();

@@ -1,5 +1,22 @@
-import { Body, Controller, Delete, Get, Inject, NotFoundException, Param, Post, Req, StreamableFile, UnauthorizedException } from "@nestjs/common";
-import { loginProfilesResponseSchema, loginRequestSchema, loginResponseSchema, userDtoSchema } from "@home-server/contracts";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  NotFoundException,
+  Param,
+  Post,
+  Req,
+  StreamableFile,
+  UnauthorizedException,
+} from "@nestjs/common";
+import {
+  loginProfilesResponseSchema,
+  loginRequestSchema,
+  loginResponseSchema,
+  userDtoSchema,
+} from "@home-server/contracts";
 import { AuthService, toUserDto } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
 import type { AuthenticatedRequest } from "./auth.types";

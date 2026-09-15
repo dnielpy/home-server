@@ -17,12 +17,14 @@ export class StatsRepository {
         .limit(1);
 
       const sameInterface = previousTotals?.interfaceName === metrics.network.interfaceName;
-      const receivedDelta = previousTotals && sameInterface && metrics.network.receivedBytes >= previousTotals.lastReceivedBytes
-        ? metrics.network.receivedBytes - previousTotals.lastReceivedBytes
-        : 0;
-      const transmittedDelta = previousTotals && sameInterface && metrics.network.transmittedBytes >= previousTotals.lastTransmittedBytes
-        ? metrics.network.transmittedBytes - previousTotals.lastTransmittedBytes
-        : 0;
+      const receivedDelta =
+        previousTotals && sameInterface && metrics.network.receivedBytes >= previousTotals.lastReceivedBytes
+          ? metrics.network.receivedBytes - previousTotals.lastReceivedBytes
+          : 0;
+      const transmittedDelta =
+        previousTotals && sameInterface && metrics.network.transmittedBytes >= previousTotals.lastTransmittedBytes
+          ? metrics.network.transmittedBytes - previousTotals.lastTransmittedBytes
+          : 0;
       const totalReceivedBytes = (previousTotals?.totalReceivedBytes ?? 0) + receivedDelta;
       const totalTransmittedBytes = (previousTotals?.totalTransmittedBytes ?? 0) + transmittedDelta;
 
@@ -90,20 +92,24 @@ export class StatsRepository {
         available: row.memoryAvailable,
         percentUsed: row.memoryPercentUsed,
       },
-      systemStorage: row.systemStorageMount ? {
-        mount: row.systemStorageMount,
-        total: toNumber(row.systemStorageTotal),
-        used: toNumber(row.systemStorageUsed),
-        available: toNumber(row.systemStorageAvailable),
-        percentUsed: toNumber(row.systemStoragePercentUsed),
-      } : null,
-      externalStorage: row.externalStorageMount ? {
-        mount: row.externalStorageMount,
-        total: toNumber(row.externalStorageTotal),
-        used: toNumber(row.externalStorageUsed),
-        available: toNumber(row.externalStorageAvailable),
-        percentUsed: toNumber(row.externalStoragePercentUsed),
-      } : null,
+      systemStorage: row.systemStorageMount
+        ? {
+            mount: row.systemStorageMount,
+            total: toNumber(row.systemStorageTotal),
+            used: toNumber(row.systemStorageUsed),
+            available: toNumber(row.systemStorageAvailable),
+            percentUsed: toNumber(row.systemStoragePercentUsed),
+          }
+        : null,
+      externalStorage: row.externalStorageMount
+        ? {
+            mount: row.externalStorageMount,
+            total: toNumber(row.externalStorageTotal),
+            used: toNumber(row.externalStorageUsed),
+            available: toNumber(row.externalStorageAvailable),
+            percentUsed: toNumber(row.externalStoragePercentUsed),
+          }
+        : null,
       network: {
         interfaceName: row.networkInterfaceName,
         receivedBytes: row.networkReceivedBytes,

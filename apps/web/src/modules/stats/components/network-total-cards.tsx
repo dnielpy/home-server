@@ -12,7 +12,9 @@ type NetworkTotalCardsProps = {
 export const NetworkTotalCards = ({ network }: NetworkTotalCardsProps) => {
   return (
     <section aria-labelledby="network-total-title">
-      <h2 id="network-total-title" className="sr-only">Tráfico total de red</h2>
+      <h2 id="network-total-title" className="sr-only">
+        Tráfico total de red
+      </h2>
       <div className="grid gap-3 sm:grid-cols-2">
         <Card className="rounded-2xl border-0 bg-sky-500/10 shadow-sm">
           <CardContent className="p-5">
@@ -20,7 +22,7 @@ export const NetworkTotalCards = ({ network }: NetworkTotalCardsProps) => {
               <ArrowDownToLine aria-hidden="true" className="size-4" /> Datos recibidos
             </p>
             <p className="mt-2 text-2xl font-bold tracking-tight">{formatBytes(network.receivedBytes)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">Total acumulado de descarga</p>
+            <p className="text-muted-foreground mt-1 text-sm">Total acumulado de descarga</p>
           </CardContent>
         </Card>
         <Card className="rounded-2xl border-0 bg-violet-500/10 shadow-sm">
@@ -29,7 +31,7 @@ export const NetworkTotalCards = ({ network }: NetworkTotalCardsProps) => {
               <ArrowUpFromLine aria-hidden="true" className="size-4" /> Datos enviados
             </p>
             <p className="mt-2 text-2xl font-bold tracking-tight">{formatBytes(network.transmittedBytes)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">Total acumulado de subida</p>
+            <p className="text-muted-foreground mt-1 text-sm">Total acumulado de subida</p>
           </CardContent>
         </Card>
       </div>

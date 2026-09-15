@@ -5,8 +5,17 @@ import { HealthModule } from "./modules/health/health.module";
 import { StatsModule } from "./modules/stats/stats.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
+import { LocalTubeModule } from "./modules/localtube/localtube.module";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ScheduleModule.forRoot(), AuthModule, UsersModule, HealthModule, StatsModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
+    AuthModule,
+    UsersModule,
+    HealthModule,
+    StatsModule,
+    LocalTubeModule,
+  ],
 })
 export class AppModule {}

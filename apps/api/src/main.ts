@@ -7,7 +7,19 @@ import { AppModule } from "./app.module";
 
 const bootstrap = async () => {
   await runMigrations();
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ logger: true, bodyLimit: 8 * 1024 * 1024 }));
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({ logger: true, bodyLimit: 8 * 1024 * 1024 }),
+  );
+  app
+    .getHttpAdapter()
+    .getInstance()
+    .addContentTypeParser(
+      "application/octet-stream",
+      (_request: unknown, payload: NodeJS.ReadableStream, done: (error: Error | null, body?: unknown) => void) => {
+        done(null, payload);
+      },
+    );
   const port = Number(process.env.API_PORT ?? 3001);
   const host = process.env.API_HOST ?? "0.0.0.0";
 

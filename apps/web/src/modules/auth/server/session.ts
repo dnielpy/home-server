@@ -9,9 +9,7 @@ export const SESSION_COOKIE = "home_server_session";
 export function toBrowserUser(user: UserDto): UserDto {
   return {
     ...user,
-    photoUrl: user.photoUrl
-      ? `/api/users/${user.id}/photo?v=${encodeURIComponent(user.updatedAt)}`
-      : null,
+    photoUrl: user.photoUrl ? `/api/users/${user.id}/photo?v=${encodeURIComponent(user.updatedAt)}` : null,
   };
 }
 
@@ -20,7 +18,7 @@ export async function getSessionToken() {
 }
 
 export async function apiFetch(path: string, init: RequestInit = {}, token?: string) {
-  const sessionToken = token ?? await getSessionToken();
+  const sessionToken = token ?? (await getSessionToken());
   const headers = new Headers(init.headers);
   headers.set("Accept", "application/json");
   if (sessionToken) headers.set("Authorization", `Bearer ${sessionToken}`);

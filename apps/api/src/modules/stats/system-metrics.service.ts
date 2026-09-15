@@ -40,7 +40,8 @@ const toStorageMetric = (fileSystem: FileSystemSize) => {
   };
 };
 
-const findMount = (fileSystems: FileSystemSize[], mount: string) => fileSystems.find((fileSystem) => fileSystem.mount === mount) ?? null;
+const findMount = (fileSystems: FileSystemSize[], mount: string) =>
+  fileSystems.find((fileSystem) => fileSystem.mount === mount) ?? null;
 
 const asNumberOrNull = (value: number | null | undefined) => {
   return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null;
@@ -77,9 +78,10 @@ export class SystemMetricsService {
         percentUsed: totalMemory === 0 ? 0 : clampPercent((usedMemory / totalMemory) * 100),
       },
       systemStorage: findMount(fileSystems, systemMount) ? toStorageMetric(findMount(fileSystems, systemMount)!) : null,
-      externalStorage: externalMount && findMount(fileSystems, externalMount)
-        ? toStorageMetric(findMount(fileSystems, externalMount)!)
-        : null,
+      externalStorage:
+        externalMount && findMount(fileSystems, externalMount)
+          ? toStorageMetric(findMount(fileSystems, externalMount)!)
+          : null,
       network: {
         interfaceName,
         receivedBytes: Math.max(0, selectedNetwork?.rx_bytes ?? 0),

@@ -2,11 +2,7 @@
 
 import { RestFactory } from "@home-server/core/http";
 import type { Result } from "@home-server/core/types";
-import {
-  userResponseSchema,
-  usersResponseSchema,
-  type UserDto,
-} from "@home-server/contracts/users";
+import { userResponseSchema, usersResponseSchema, type UserDto } from "@home-server/contracts/users";
 import { API_ROUTES } from "@/src/routes";
 
 export type CreateUserInput = {
@@ -24,9 +20,7 @@ export type UpdateUserInput = {
 
 const toBrowserUser = (user: UserDto): UserDto => ({
   ...user,
-  photoUrl: user.photoUrl
-    ? `/api/users/${user.id}/photo?v=${encodeURIComponent(user.updatedAt)}`
-    : null,
+  photoUrl: user.photoUrl ? `/api/users/${user.id}/photo?v=${encodeURIComponent(user.updatedAt)}` : null,
 });
 
 const usersCommand = RestFactory.createGet(API_ROUTES.users.list, {
@@ -47,27 +41,19 @@ export const getUsers = async (): Promise<Result<UserDto[]>> => {
   return { success: true, data: result.data.users.map(toBrowserUser) };
 };
 
-export const createUser = async (
-  data: CreateUserInput,
-): Promise<Result<UserDto>> => {
+export const createUser = async (data: CreateUserInput): Promise<Result<UserDto>> => {
   const result = await createUserCommand.execute(data);
   if (!result.success) return result;
 
   return { success: true, data: toBrowserUser(result.data.user) };
 };
 
-export const updateUser = async (
-  userId: string,
-  data: UpdateUserInput,
-): Promise<Result<UserDto>> => {
-  const command = RestFactory.createPatch(
-    `${API_ROUTES.users.list}/${userId}`,
-    {
-      cache: "no-store",
-      buildRequest: (input) => ({ body: input }),
-      parse: userResponseSchema.parse,
-    },
-  );
+export const updateUser = async (userId: string, data: UpdateUserInput): Promise<Result<UserDto>> => {
+  const command = RestFactory.createPatch(`${API_ROUTES.users.list}/${userId}`, {
+    cache: "no-store",
+    buildRequest: (input) => ({ body: input }),
+    parse: userResponseSchema.parse,
+  });
   const result = await command.execute(data);
   if (!result.success) return result;
 

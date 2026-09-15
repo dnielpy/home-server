@@ -1,0 +1,11 @@
+node_modules
+.next
+.turbo
+dist
+build
+out
+coverage
+Download
+*.lock
+pnpm-lock.yaml
+packages/database/drizzle/meta

@@ -18,24 +18,26 @@ export function validateUserName(value: string) {
   const name = normalizeUserName(value);
   if (!name) throw new Error("El nombre de usuario es obligatorio.");
   if (name.length > 80) throw new Error("El nombre de usuario no puede superar 80 caracteres.");
-  if (/[\\/\u0000-\u001f\u007f]/.test(name) || name === "." || name === ".." || name.startsWith(".")) throw new Error("El nombre de usuario contiene caracteres no válidos.");
+  if (/[\\/\u0000-\u001f\u007f]/.test(name) || name === "." || name === ".." || name.startsWith("."))
+    throw new Error("El nombre de usuario contiene caracteres no válidos.");
   return name;
 }
 
 export function validatePassword(value: string) {
-  if (value.length < PASSWORD_MIN_LENGTH) throw new Error(`La contraseña debe tener al menos ${PASSWORD_MIN_LENGTH} caracteres.`);
+  if (value.length < PASSWORD_MIN_LENGTH)
+    throw new Error(`La contraseña debe tener al menos ${PASSWORD_MIN_LENGTH} caracteres.`);
   return value;
 }
 
 export async function hashPassword(password: string) {
   const salt = randomBytes(16).toString("base64url");
-  const hash = await scryptAsync(password, salt, 64) as Buffer;
+  const hash = (await scryptAsync(password, salt, 64)) as Buffer;
   return { passwordHash: hash.toString("base64url"), passwordSalt: salt };
 }
 
 export async function verifyPassword(password: string, record: Pick<UserRecord, "passwordHash" | "passwordSalt">) {
   try {
-    const candidate = await scryptAsync(password, record.passwordSalt, 64) as Buffer;
+    const candidate = (await scryptAsync(password, record.passwordSalt, 64)) as Buffer;
     const expected = Buffer.from(record.passwordHash, "base64url");
     return candidate.length === expected.length && timingSafeEqual(candidate, expected);
   } catch {
@@ -81,8 +83,11 @@ export class AuthService {
 
     const normalizedName = validateUserName(name);
     validatePassword(password);
-    const [existing] = await db.select({ id: users.id }).from(users)
-      .where(eq(sql`lower(${users.name})`, normalizeUserNameForLookup(normalizedName))).limit(1);
+    const [existing] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(sql`lower(${users.name})`, normalizeUserNameForLookup(normalizedName)))
+      .limit(1);
     if (existing) throw new Error(`No se puede crear el administrador: el usuario '${normalizedName}' ya existe.`);
 
     const credentials = await hashPassword(password);
@@ -98,13 +103,19 @@ export class AuthService {
   }
 
   public async findByName(name: string) {
-    const [user] = await db.select().from(users)
-      .where(eq(sql`lower(${users.name})`, normalizeUserNameForLookup(name))).limit(1);
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(sql`lower(${users.name})`, normalizeUserNameForLookup(name)))
+      .limit(1);
     return user ?? null;
   }
 
   public async listLoginProfiles(): Promise<LoginProfile[]> {
-    const records = await db.select().from(users).orderBy(sql`${users.isAdmin} desc`, users.name);
+    const records = await db
+      .select()
+      .from(users)
+      .orderBy(sql`${users.isAdmin} desc`, users.name);
     return records.map((user) => ({
       id: user.id,
       name: user.name,
@@ -127,7 +138,9 @@ export class AuthService {
 
   public async getUserForSession(token: string | undefined) {
     if (!token) return null;
-    const [result] = await db.select({ user: users }).from(sessions)
+    const [result] = await db
+      .select({ user: users })
+      .from(sessions)
       .innerJoin(users, eq(sessions.userId, users.id))
       .where(and(eq(sessions.tokenHash, hashSessionToken(token)), gt(sessions.expiresAt, new Date())))
       .limit(1);

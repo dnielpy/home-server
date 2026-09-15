@@ -9,10 +9,7 @@ type StatsContainerProps = {
   initialWeeklyHistory: NetworkHistoryPoint[];
 };
 
-export const StatsContainer = ({
-  initialLiveStats,
-  initialWeeklyHistory,
-}: StatsContainerProps) => {
+export const StatsContainer = ({ initialLiveStats, initialWeeklyHistory }: StatsContainerProps) => {
   const { liveStats, weeklyHistory, error } = useStatsPolling({
     initialLiveStats,
     initialWeeklyHistory,

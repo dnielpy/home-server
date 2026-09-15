@@ -58,10 +58,18 @@ export class RestErrorHandler {
         ...(request?.body === undefined ? {} : { requestBody: request.body }),
       });
       if (response.status === 401) {
-        return { success: false, error: { message }, errorDetails: { type: "AUTH_ERROR", statusCode: 401, clientCode: errorPayload?.clientCode } };
+        return {
+          success: false,
+          error: { message },
+          errorDetails: { type: "AUTH_ERROR", statusCode: 401, clientCode: errorPayload?.clientCode },
+        };
       }
       if (response.status === 403) {
-        return { success: false, error: { message }, errorDetails: { type: "FORBIDDEN_ERROR", statusCode: 403, clientCode: errorPayload?.clientCode } };
+        return {
+          success: false,
+          error: { message },
+          errorDetails: { type: "FORBIDDEN_ERROR", statusCode: 403, clientCode: errorPayload?.clientCode },
+        };
       }
       return {
         success: false,

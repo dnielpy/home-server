@@ -24,7 +24,7 @@
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/migrate.ts"
+    "db:migrate": "set -a; . ../../.env; set +a; tsx src/migrate.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.2",

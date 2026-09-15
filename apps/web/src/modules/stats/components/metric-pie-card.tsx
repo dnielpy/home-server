@@ -15,7 +15,14 @@ type MetricPieCardProps = {
   unavailableMessage?: string;
 };
 
-export const MetricPieCard = ({ title, description, percentage, segments, detail, unavailableMessage }: MetricPieCardProps) => {
+export const MetricPieCard = ({
+  title,
+  description,
+  percentage,
+  segments,
+  detail,
+  unavailableMessage,
+}: MetricPieCardProps) => {
   const titleId = useId();
   const unavailable = unavailableMessage ?? (percentage === null ? "Calculando…" : undefined);
 
@@ -24,17 +31,19 @@ export const MetricPieCard = ({ title, description, percentage, segments, detail
       <CardHeader className="p-5 pb-0">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 id={titleId} className="text-sm font-semibold">{title}</h2>
+            <h2 id={titleId} className="text-sm font-semibold">
+              {title}
+            </h2>
             <CardDescription className="mt-1">{description}</CardDescription>
           </div>
-          <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+          <span className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-xs font-semibold">
             {formatPercent(percentage)}
           </span>
         </div>
       </CardHeader>
       <CardContent className="p-5 pt-4">
         {unavailable ? (
-          <div className="rounded-xl border border-dashed bg-muted/40 p-4 text-sm text-muted-foreground">
+          <div className="bg-muted/40 text-muted-foreground rounded-xl border border-dashed p-4 text-sm">
             {unavailable}
           </div>
         ) : (
@@ -42,14 +51,23 @@ export const MetricPieCard = ({ title, description, percentage, segments, detail
             <div className="h-44" aria-label={`${title}: ${formatPercent(percentage)}`}>
               <ResponsiveContainer height="100%" width="100%">
                 <PieChart>
-                  <Pie data={segments} dataKey="value" innerRadius="61%" outerRadius="85%" paddingAngle={3} stroke="none">
-                    {segments.map((segment) => <Cell key={segment.name} fill={segment.color} />)}
+                  <Pie
+                    data={segments}
+                    dataKey="value"
+                    innerRadius="61%"
+                    outerRadius="85%"
+                    paddingAngle={3}
+                    stroke="none"
+                  >
+                    {segments.map((segment) => (
+                      <Cell key={segment.name} fill={segment.color} />
+                    ))}
                   </Pie>
                   <Tooltip formatter={(value: unknown) => formatPercent(Number(value ?? 0))} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+            <div className="text-muted-foreground mt-1 flex flex-wrap gap-x-4 gap-y-2 text-xs">
               {segments.map((segment) => (
                 <span className="inline-flex items-center gap-1.5" key={segment.name}>
                   <span className="size-2 rounded-full" style={{ backgroundColor: segment.color }} />
@@ -57,7 +75,7 @@ export const MetricPieCard = ({ title, description, percentage, segments, detail
                 </span>
               ))}
             </div>
-            <p className="mt-4 border-t pt-3 text-sm font-medium text-card-foreground">{detail}</p>
+            <p className="text-card-foreground mt-4 border-t pt-3 text-sm font-medium">{detail}</p>
           </>
         )}
       </CardContent>

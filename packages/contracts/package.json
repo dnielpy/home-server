@@ -20,6 +20,10 @@
     "./users": {
       "types": "./dist/users.d.ts",
       "default": "./dist/users.js"
+    },
+    "./localtube": {
+      "types": "./dist/localtube.d.ts",
+      "default": "./dist/localtube.js"
     }
   },
   "scripts": {

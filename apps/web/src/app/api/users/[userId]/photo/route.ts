@@ -10,6 +10,9 @@ export async function GET(_request: Request, context: { params: Promise<{ userId
   if (!response.ok) return NextResponse.json({ error: "Foto no encontrada." }, { status: response.status });
   return new NextResponse(await response.arrayBuffer(), {
     status: 200,
-    headers: { "Content-Type": response.headers.get("content-type") || "image/jpeg", "Cache-Control": "private, max-age=60" },
+    headers: {
+      "Content-Type": response.headers.get("content-type") || "image/jpeg",
+      "Cache-Control": "private, max-age=60",
+    },
   });
 }

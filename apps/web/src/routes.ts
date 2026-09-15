@@ -1,4 +1,5 @@
 const STATS_V1 = "/v1/stats";
+const LOCALTUBE_V1 = "/v1/localtube";
 
 export const API_ROUTES = {
   health: "/health",
@@ -9,5 +10,9 @@ export const API_ROUTES = {
   },
   users: {
     list: "/v1/users",
+  },
+  localTube: {
+    videos: `${LOCALTUBE_V1}/videos`,
+    suggestions: `${LOCALTUBE_V1}/videos/suggestions`,
   },
 } as const;

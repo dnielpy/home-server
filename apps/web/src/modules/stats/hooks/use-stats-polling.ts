@@ -15,10 +15,7 @@ type UseStatsPollingInput = {
 const unknownErrorMessage = (error: unknown, fallback: string): string =>
   error instanceof Error ? error.message : fallback;
 
-export const useStatsPolling = ({
-  initialLiveStats,
-  initialWeeklyHistory,
-}: UseStatsPollingInput) => {
+export const useStatsPolling = ({ initialLiveStats, initialWeeklyHistory }: UseStatsPollingInput) => {
   const [liveStats, setLiveStats] = useState(initialLiveStats);
   const [weeklyHistory, setWeeklyHistory] = useState(initialWeeklyHistory);
   const [liveError, setLiveError] = useState<string | null>(null);

@@ -33,21 +33,33 @@ describe("useStatsPolling", () => {
   it("inicia ambas lecturas y evita solapar el polling vivo", async () => {
     vi.useFakeTimers();
     let resolveLive: (value: { success: true; data: StatsLiveResponse }) => void = () => undefined;
-    getLiveStats.mockReturnValue(new Promise((resolve) => { resolveLive = resolve; }));
+    getLiveStats.mockReturnValue(
+      new Promise((resolve) => {
+        resolveLive = resolve;
+      }),
+    );
     getWeeklyNetworkHistory.mockResolvedValue({ success: true, data: history });
 
-    const { result, unmount } = renderHook(() => useStatsPolling({
-      initialLiveStats: null,
-      initialWeeklyHistory: [],
-    }));
+    const { result, unmount } = renderHook(() =>
+      useStatsPolling({
+        initialLiveStats: null,
+        initialWeeklyHistory: [],
+      }),
+    );
 
-    await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
     expect(getLiveStats).toHaveBeenCalledTimes(1);
     expect(getWeeklyNetworkHistory).toHaveBeenCalledTimes(1);
-    await act(async () => { await vi.advanceTimersByTimeAsync(6_000); });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(6_000);
+    });
     expect(getLiveStats).toHaveBeenCalledTimes(1);
 
-    await act(async () => { resolveLive({ success: true, data: live }); });
+    await act(async () => {
+      resolveLive({ success: true, data: live });
+    });
     expect(result.current.liveStats).toEqual(live);
     unmount();
   });

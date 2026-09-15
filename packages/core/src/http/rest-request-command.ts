@@ -24,9 +24,10 @@ export interface BuiltRequest {
 }
 
 const FALLBACK_ERROR_HOST = "http://error.invalid";
-const hasJsonContentType = (headers: Record<string, string>): boolean => Object.entries(headers).some(
-  ([name, value]) => name.toLowerCase() === "content-type" && value.includes("application/json"),
-);
+const hasJsonContentType = (headers: Record<string, string>): boolean =>
+  Object.entries(headers).some(
+    ([name, value]) => name.toLowerCase() === "content-type" && value.includes("application/json"),
+  );
 
 export class RestRequestCommand<T = unknown, V = unknown> extends BaseRestCommand<T> implements RestCommand<T, V> {
   public constructor(
@@ -57,7 +58,11 @@ export class RestRequestCommand<T = unknown, V = unknown> extends BaseRestComman
       let url = new URL(this.endpoint, baseUrl);
 
       context = createRequestContext({
-        method: this.method, url, endpoint: this.endpoint, headers: { ...baseHeaders, ...built?.headers }, body: built?.body,
+        method: this.method,
+        url,
+        endpoint: this.endpoint,
+        headers: { ...baseHeaders, ...built?.headers },
+        body: built?.body,
       });
       const patch = config.beforeRequest ? await this.runBeforeRequest(config.beforeRequest, context) : undefined;
       if (patch?.url && !built?.url) {
@@ -80,14 +85,22 @@ export class RestRequestCommand<T = unknown, V = unknown> extends BaseRestComman
         next: this.next ?? config.defaultNext,
         ...(credentials ? { credentials } : {}),
         ...(this.method !== "GET" && built?.body !== undefined
-          ? { body: isFormData ? (built.body as FormData) : hasJsonContentType(headers) ? JSON.stringify(built.body) : (built.body as BodyInit) }
+          ? {
+              body: isFormData
+                ? (built.body as FormData)
+                : hasJsonContentType(headers)
+                  ? JSON.stringify(built.body)
+                  : (built.body as BodyInit),
+            }
           : {}),
       };
       Logger.log(`[http] ${this.method} ${url.toString()}`, { headers: redactSensitiveHeaders(headers) });
       const response = await fetch(url, init);
       if (config.afterResponse) await this.runAfterResponse(config.afterResponse, context, response.clone());
       const handled = await RestErrorHandler.handleResponse<unknown>(response, {
-        method: this.method, url: url.toString(), body: built?.body,
+        method: this.method,
+        url: url.toString(),
+        body: built?.body,
       });
       if (!handled.success) {
         const result = this.handleAuthError(handled as Result<T>);
@@ -110,7 +123,8 @@ export class RestRequestCommand<T = unknown, V = unknown> extends BaseRestComman
   }
 
   private async runBeforeRequest(
-    hook: NonNullable<RestFactoryConfig["beforeRequest"]>, context: RequestContext,
+    hook: NonNullable<RestFactoryConfig["beforeRequest"]>,
+    context: RequestContext,
   ): Promise<Awaited<ReturnType<NonNullable<RestFactoryConfig["beforeRequest"]>>>> {
     try {
       return await hook(context);
@@ -121,7 +135,9 @@ export class RestRequestCommand<T = unknown, V = unknown> extends BaseRestComman
   }
 
   private async runAfterResponse(
-    hook: NonNullable<RestFactoryConfig["afterResponse"]>, context: RequestContext, response: Response,
+    hook: NonNullable<RestFactoryConfig["afterResponse"]>,
+    context: RequestContext,
+    response: Response,
   ): Promise<void> {
     try {
       await hook(context, response);
@@ -130,11 +146,20 @@ export class RestRequestCommand<T = unknown, V = unknown> extends BaseRestComman
     }
   }
 
-  private async runOnError(hook: RestFactoryConfig["onError"], context: RequestContext | undefined, result: Result<T>): Promise<void> {
+  private async runOnError(
+    hook: RestFactoryConfig["onError"],
+    context: RequestContext | undefined,
+    result: Result<T>,
+  ): Promise<void> {
     if (!hook) return;
-    const safeContext = context ?? createRequestContext({
-      method: this.method, url: new URL(this.endpoint, FALLBACK_ERROR_HOST), endpoint: this.endpoint, headers: this.headers,
-    });
+    const safeContext =
+      context ??
+      createRequestContext({
+        method: this.method,
+        url: new URL(this.endpoint, FALLBACK_ERROR_HOST),
+        endpoint: this.endpoint,
+        headers: this.headers,
+      });
     try {
       await hook(safeContext, result as Result<unknown>);
     } catch (error) {
