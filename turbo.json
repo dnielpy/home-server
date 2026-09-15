@@ -1,6 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["API_URL", "NEXT_RUNTIME", "NODE_ENV"],
+  "globalEnv": [
+    "API_URL",
+    "API_PORT",
+    "API_HOST",
+    "DATABASE_URL",
+    "ADMIN_USERNAME",
+    "ADMIN_PASSWORD",
+    "EXTERNAL_DISK_MOUNT",
+    "NEXT_RUNTIME",
+    "NODE_ENV"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

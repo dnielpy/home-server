@@ -3,16 +3,19 @@
 import Link from "next/link";
 import { ChartNoAxesCombined, LayoutDashboard } from "lucide-react";
 import { usePathname } from "next/navigation";
+import type { UserDto } from "@home-server/contracts/users";
+import { Users } from "lucide-react";
 
 const navigation = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/stats", label: "Estadísticas", icon: ChartNoAxesCombined },
 ];
 
-export const Sidebar = () => {
+export const Sidebar = ({ user }: { user: UserDto }) => {
   const pathname = usePathname();
+  const items = user.isAdmin ? [...navigation, { href: "/users", label: "Usuarios", icon: Users }] : navigation;
 
-  const links = navigation.map(({ href, label, icon: Icon }) => {
+  const links = items.map(({ href, label, icon: Icon }) => {
     const active = pathname === href;
 
     return (

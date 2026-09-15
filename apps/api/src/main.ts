@@ -7,7 +7,7 @@ import { AppModule } from "./app.module";
 
 const bootstrap = async () => {
   await runMigrations();
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ logger: true }));
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ logger: true, bodyLimit: 8 * 1024 * 1024 }));
   const port = Number(process.env.API_PORT ?? 3001);
   const host = process.env.API_HOST ?? "0.0.0.0";
 

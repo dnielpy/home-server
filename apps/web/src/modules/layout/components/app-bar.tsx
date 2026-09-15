@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { Server } from "lucide-react";
-import { ThemeToggle } from "@/src/modules/layout/components/theme-toggle";
+import { UserMenu } from "@/src/modules/layout/components/user-menu";
+import type { UserDto } from "@home-server/contracts/users";
 
-export const AppBar = () => {
+export const AppBar = ({ user }: { user: UserDto }) => {
   return (
     <header className="sticky top-0 z-20 flex h-[66px] items-center border-b border-border bg-background/95 px-4 backdrop-blur sm:px-7 lg:px-4">
       <Link
@@ -18,9 +19,7 @@ export const AppBar = () => {
         Home Server
       </Link>
 
-      <div className="ml-auto">
-        <ThemeToggle />
-      </div>
+      <div className="ml-auto"><UserMenu user={user} /></div>
     </header>
   );
 };

@@ -3,15 +3,12 @@ import { getLiveStats, getWeeklyNetworkHistory } from "@/src/lib/services/stats"
 
 export const dynamic = "force-dynamic";
 
-const StatsPage = async () => {
+export default async function StatsPage() {
   const [liveResult, historyResult] = await Promise.all([getLiveStats(), getWeeklyNetworkHistory()]);
-
   return (
     <StatsContainer
       initialLiveStats={liveResult.success ? liveResult.data : null}
       initialWeeklyHistory={historyResult.success ? historyResult.data.points : []}
     />
   );
-};
-
-export default StatsPage;
+}

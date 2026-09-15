@@ -7,4 +7,7 @@ export const API_ROUTES = {
     live: `${STATS_V1}/live`,
     networkHistory: `${STATS_V1}/network-history?period=7d`,
   },
+  users: {
+    list: "/v1/users",
+  },
 } as const;

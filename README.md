@@ -32,3 +32,20 @@ docker compose -f docker-compose.production.yml up --build -d
 En producción, solo el servicio `api` comparte los namespaces de red y procesos del host y monta la raíz en `/host` como solo lectura. Ni `web` ni PostgreSQL reciben esos montajes ni credenciales de base de datos. Configura `EXTERNAL_DISK_MOUNT` con el punto de montaje absoluto del disco externo, por ejemplo `/mnt/external`; Compose lo expone internamente como `/host-external` para `systeminformation`.
 
 El proceso debe permanecer en una red privada o detrás de un proxy autenticado; no expongas directamente a Internet un contenedor que puede leer información del host.
+
+## Datos de usuarios en el disco externo
+
+El API usa `EXTERNAL_DISK_MOUNT` como raíz de datos. Al iniciar, crea las carpetas de cada usuario y las aplicaciones disponibles:
+
+```text
+Download/test/
+├── admin/
+│   ├── streamlt/
+│   ├── lgallery/
+│   └── profile-<id>.<ext>
+└── usuario/
+    ├── streamlt/
+    └── lgallery/
+```
+
+En `docker-compose.yml`, `EXTERNAL_DISK_MOUNT` se interpreta como una ruta del host y se monta en `/app/external`. En producción se monta en `/host-external` con permisos de lectura y escritura para que el API pueda crear usuarios y guardar sus fotos.

@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Query } from "@nestjs/common";
+import { BadRequestException, Controller, Get, Inject, Query, UseGuards } from "@nestjs/common";
 import {
   networkHistoryResponseSchema,
   statsLiveResponseSchema,
@@ -6,10 +6,15 @@ import {
   type StatsLiveResponse,
 } from "@home-server/contracts/stats";
 import { StatsService } from "./stats.service";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller("v1/stats")
+@UseGuards(AuthGuard)
 export class StatsController {
-  public constructor(private readonly statsService: StatsService) {}
+  public constructor(
+    @Inject(StatsService)
+    private readonly statsService: StatsService,
+  ) {}
 
   @Get("live")
   public async getLive(): Promise<StatsLiveResponse> {

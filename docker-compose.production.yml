@@ -28,9 +28,11 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-home_server}:${POSTGRES_PASSWORD:-home_server}@127.0.0.1:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-home_server}
       SYSTEM_DISK_MOUNT: /host
       EXTERNAL_DISK_MOUNT: /host-external
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     volumes:
       - /:/host:ro,rslave
-      - ${EXTERNAL_DISK_MOUNT:-/mnt/external}:/host-external:ro
+      - ${EXTERNAL_DISK_MOUNT:-/mnt/external}:/host-external
     depends_on:
       postgres:
         condition: service_healthy

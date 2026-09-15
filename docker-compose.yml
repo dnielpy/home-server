@@ -22,7 +22,11 @@ services:
       API_PORT: 3001
       DATABASE_URL: postgresql://${POSTGRES_USER:-home_server}:${POSTGRES_PASSWORD:-home_server}@postgres:5432/${POSTGRES_DB:-home_server}
       SYSTEM_DISK_MOUNT: /
-      EXTERNAL_DISK_MOUNT: ${EXTERNAL_DISK_MOUNT:-}
+      EXTERNAL_DISK_MOUNT: /app/external
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    volumes:
+      - ${EXTERNAL_DISK_MOUNT:-./Download/test}:/app/external
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit, ServiceUnavailableException } from "@nestjs/common";
+import { Inject, Injectable, Logger, OnModuleInit, ServiceUnavailableException } from "@nestjs/common";
 import { Cron, CronExpression, Interval } from "@nestjs/schedule";
 import type { NetworkHistoryResponse, StatsLiveResponse } from "@home-server/contracts/stats";
 import { StatsRepository } from "./stats.repository";
@@ -15,7 +15,9 @@ export class StatsService implements OnModuleInit {
   private collecting = false;
 
   public constructor(
+    @Inject(SystemMetricsService)
     private readonly systemMetricsService: SystemMetricsService,
+    @Inject(StatsRepository)
     private readonly statsRepository: StatsRepository,
   ) {}
 
