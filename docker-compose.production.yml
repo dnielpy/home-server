@@ -1,0 +1,15 @@
+services:
+  home-server:
+    build: .
+    pid: host
+    network_mode: host
+    environment:
+      NODE_ENV: production
+      PORT: ${APP_PORT:-3000}
+      HOST_ROOT_PATH: /host
+      SYSTEM_DISK_MOUNT: /host
+      EXTERNAL_DISK_MOUNT: /host-external
+    volumes:
+      - /:/host:ro,rslave
+      - ${EXTERNAL_DISK_MOUNT:-/mnt/external}:/host-external:ro
+    restart: unless-stopped
