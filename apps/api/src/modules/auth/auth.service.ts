@@ -3,7 +3,7 @@ import { promisify } from "node:util";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { and, eq, gt, sql } from "drizzle-orm";
 import { db, sessions, users } from "@home-server/database";
-import type { UserDto } from "@home-server/contracts";
+import type { LoginProfile, UserDto } from "@home-server/contracts";
 import type { UserRecord } from "./auth.types";
 import { UserStorageService } from "../storage/user-storage.service";
 
@@ -101,6 +101,21 @@ export class AuthService {
     const [user] = await db.select().from(users)
       .where(eq(sql`lower(${users.name})`, normalizeUserNameForLookup(name))).limit(1);
     return user ?? null;
+  }
+
+  public async listLoginProfiles(): Promise<LoginProfile[]> {
+    const records = await db.select().from(users).orderBy(sql`${users.isAdmin} desc`, users.name);
+    return records.map((user) => ({
+      id: user.id,
+      name: user.name,
+      photoUrl: user.photoPath ? `/v1/auth/profiles/${user.id}/photo` : null,
+    }));
+  }
+
+  public async loginProfilePhoto(id: string) {
+    const user = await this.findById(id);
+    if (!user || !user.photoPath) return null;
+    return this.userStorage.openPhoto(user.name, user.photoPath);
   }
 
   public async createSession(userId: string) {

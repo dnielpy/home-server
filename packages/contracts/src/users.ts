@@ -19,10 +19,18 @@ export const loginResponseSchema = z.object({
   user: userDtoSchema,
 });
 
+export const loginProfileSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  photoUrl: z.string().nullable(),
+});
+
 export const usersResponseSchema = z.object({ users: z.array(userDtoSchema) });
 export const userResponseSchema = z.object({ user: userDtoSchema });
+export const loginProfilesResponseSchema = z.object({ profiles: z.array(loginProfileSchema) });
 
 export type UserDto = z.infer<typeof userDtoSchema>;
+export type LoginProfile = z.infer<typeof loginProfileSchema>;
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type LoginResponse = z.infer<typeof loginResponseSchema>;
 export type UsersResponse = z.infer<typeof usersResponseSchema>;

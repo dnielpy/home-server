@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Inject, Post, Req, UnauthorizedException } from "@nestjs/common";
-import { loginRequestSchema, loginResponseSchema, userDtoSchema } from "@home-server/contracts";
+import { Body, Controller, Delete, Get, Inject, NotFoundException, Param, Post, Req, StreamableFile, UnauthorizedException } from "@nestjs/common";
+import { loginProfilesResponseSchema, loginRequestSchema, loginResponseSchema, userDtoSchema } from "@home-server/contracts";
 import { AuthService, toUserDto } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
 import type { AuthenticatedRequest } from "./auth.types";
@@ -19,6 +19,18 @@ export class AuthController {
     const result = await this.authService.login(parsed.data.name, parsed.data.password);
     if (!result) throw new UnauthorizedException("Credenciales incorrectas.");
     return loginResponseSchema.parse(result);
+  }
+
+  @Get("profiles")
+  public async profiles() {
+    return loginProfilesResponseSchema.parse({ profiles: await this.authService.listLoginProfiles() });
+  }
+
+  @Get("profiles/:id/photo")
+  public async profilePhoto(@Param("id") id: string) {
+    const photo = await this.authService.loginProfilePhoto(id);
+    if (!photo) throw new NotFoundException("Foto no encontrada.");
+    return new StreamableFile(photo.stream, { type: photo.contentType, disposition: "inline" });
   }
 
   @UseGuards(AuthGuard)

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LoginForm } from "@/src/modules/auth/components/login-form";
+import { getLoginProfiles } from "@/src/modules/auth/server/profiles";
 import { isSafeNextPath } from "@/src/modules/auth/server/session";
 
 export const metadata: Metadata = {
@@ -13,5 +14,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const params = await searchParams;
   const requestedNext = Array.isArray(params.next) ? params.next[0] : params.next;
   const nextPath = isSafeNextPath(requestedNext) ? requestedNext! : "/";
-  return <LoginForm nextPath={nextPath} />;
+  const profiles = await getLoginProfiles();
+  return <LoginForm nextPath={nextPath} profiles={profiles} />;
 }
