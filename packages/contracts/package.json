@@ -24,6 +24,10 @@
     "./localtube": {
       "types": "./dist/localtube.d.ts",
       "default": "./dist/localtube.js"
+    },
+    "./gallery": {
+      "types": "./dist/gallery.d.ts",
+      "default": "./dist/gallery.js"
     }
   },
   "scripts": {

@@ -16,6 +16,7 @@ const bootstrap = async () => {
     .getInstance()
     .addContentTypeParser(
       "application/octet-stream",
+      { bodyLimit: Number.MAX_SAFE_INTEGER },
       (_request: unknown, payload: NodeJS.ReadableStream, done: (error: Error | null, body?: unknown) => void) => {
         done(null, payload);
       },

@@ -16,7 +16,7 @@ const PHOTO_TYPES = new Map([
   ["image/png", ".png"],
   ["image/webp", ".webp"],
 ]);
-const APPLICATION_DIRECTORIES = ["local-tube", "lgallery"] as const;
+const APPLICATION_DIRECTORIES = ["local-tube", "gallery"] as const;
 
 export type PhotoUpload = { buffer: Buffer; mimetype: string };
 
@@ -47,6 +47,11 @@ export class UserStorageService {
   public async ensureLocalTubeDirectory(userName: string) {
     await this.ensureUserDirectory(userName);
     return path.join(this.userDirectory(userName), "local-tube");
+  }
+
+  public async ensureGalleryDirectory(userName: string) {
+    await this.ensureUserDirectory(userName);
+    return path.join(this.userDirectory(userName), "gallery");
   }
 
   public async createUserDirectory(userName: string) {

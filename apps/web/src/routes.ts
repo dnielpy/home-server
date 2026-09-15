@@ -1,5 +1,6 @@
 const STATS_V1 = "/v1/stats";
 const LOCALTUBE_V1 = "/v1/localtube";
+const GALLERY_V1 = "/v1/gallery";
 
 export const API_ROUTES = {
   health: "/health",
@@ -14,5 +15,10 @@ export const API_ROUTES = {
   localTube: {
     videos: `${LOCALTUBE_V1}/videos`,
     suggestions: `${LOCALTUBE_V1}/videos/suggestions`,
+  },
+  gallery: {
+    media: `${GALLERY_V1}/media`,
+    albums: `${GALLERY_V1}/albums`,
+    uploads: `${GALLERY_V1}/uploads`,
   },
 } as const;

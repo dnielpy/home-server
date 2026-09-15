@@ -43,11 +43,11 @@ El API usa `EXTERNAL_DISK_MOUNT` como raíz de datos. Al iniciar, crea las carpe
 Download/test/
 ├── admin/
 │   ├── local-tube/
-│   ├── lgallery/
+│   ├── gallery/
 │   └── profile-<id>.<ext>
 └── usuario/
     ├── local-tube/
-    └── lgallery/
+    └── gallery/
 ```
 
 Cada usuario solo accede a `EXTERNAL_DISK_MOUNT/<usuario>/local-tube`, donde LocalTube conserva los vídeos MP4/WebM y su caché oculta de miniaturas. Las carpetas antiguas `streamlt/` no se migran ni se eliminan: se preservan sin usar.
