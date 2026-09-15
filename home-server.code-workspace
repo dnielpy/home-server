@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../streamlt"
+		},
+		{
+			"path": "../video-downloader"
+		},
+		{
+			"path": "../lgallery"
+		},
+		{
+			"path": "../ubuntu-server-dashboard"
+		}
+	],
+	"settings": {}
+}
