@@ -31,7 +31,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      <aside className="hidden w-[220px] shrink-0 border-r border-border px-3 pt-3 lg:block">
+      <aside className="sticky top-[66px] hidden h-[calc(100vh-66px)] w-[220px] shrink-0 self-start border-r border-border bg-background px-3 pt-3 lg:block">
         <nav aria-label="Navegación principal" className="grid gap-1 [&_a]:h-10">
           {links}
         </nav>
