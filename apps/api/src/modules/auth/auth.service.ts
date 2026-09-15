@@ -115,7 +115,7 @@ export class AuthService {
   public async loginProfilePhoto(id: string) {
     const user = await this.findById(id);
     if (!user || !user.photoPath) return null;
-    return this.userStorage.openPhoto(user.name, user.photoPath);
+    return await this.userStorage.openPhoto(user.name, user.photoPath);
   }
 
   public async createSession(userId: string) {

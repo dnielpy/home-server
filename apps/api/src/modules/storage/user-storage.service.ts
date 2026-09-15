@@ -1,5 +1,5 @@
 import { createReadStream } from "node:fs";
-import { mkdir, readdir, rename, rmdir, unlink, writeFile } from "node:fs/promises";
+import { access, mkdir, readdir, rename, rmdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { ConflictException, Injectable, NotFoundException, PayloadTooLargeException, UnsupportedMediaTypeException } from "@nestjs/common";
@@ -82,8 +82,14 @@ export class UserStorageService {
     await unlink(this.photoPath(userName, filename)).catch(() => undefined);
   }
 
-  public openPhoto(userName: string, filename: string) {
+  public async openPhoto(userName: string, filename: string) {
     const photoPath = this.photoPath(userName, filename);
+    try {
+      await access(photoPath);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new NotFoundException("Foto no encontrada.");
+      throw error;
+    }
     const extension = path.extname(filename).toLowerCase();
     const contentType = extension === ".png" ? "image/png" : extension === ".webp" ? "image/webp" : "image/jpeg";
     return { stream: createReadStream(photoPath), contentType };

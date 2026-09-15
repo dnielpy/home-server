@@ -102,7 +102,7 @@ export class UsersService {
   public async photo(id: string) {
     const current = await this.authService.findById(id);
     if (!current || !current.photoPath) throw new NotFoundException("Foto no encontrada.");
-    return this.userStorage.openPhoto(current.name, current.photoPath);
+    return await this.userStorage.openPhoto(current.name, current.photoPath);
   }
 
   private async assertNameAvailable(name: string, ignoredId?: string) {
