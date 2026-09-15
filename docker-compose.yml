@@ -1,6 +1,45 @@
 services:
-  home-server:
-    build: .
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-home_server}
+      POSTGRES_USER: ${POSTGRES_USER:-home_server}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-home_server}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      API_PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-home_server}:${POSTGRES_PASSWORD:-home_server}@postgres:5432/${POSTGRES_DB:-home_server}
+      SYSTEM_DISK_MOUNT: /
+      EXTERNAL_DISK_MOUNT: ${EXTERNAL_DISK_MOUNT:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      API_URL: http://api:3001
+      PORT: 3000
     ports:
       - "${APP_PORT:-3000}:3000"
+    depends_on:
+      - api
     restart: unless-stopped
+
+volumes:
+  postgres-data:

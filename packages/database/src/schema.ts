@@ -1,0 +1,27 @@
+import { bigint, index, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+
+export const stats = pgTable("stats", {
+  id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
+  recordedAt: timestamp("recorded_at", { withTimezone: true, mode: "date" }).notNull(),
+  cpuUsed: real("cpu_used").notNull(),
+  cpuIdle: real("cpu_idle").notNull(),
+  memoryTotal: bigint("memory_total", { mode: "number" }).notNull(),
+  memoryUsed: bigint("memory_used", { mode: "number" }).notNull(),
+  memoryAvailable: bigint("memory_available", { mode: "number" }).notNull(),
+  memoryPercentUsed: real("memory_percent_used").notNull(),
+  systemStorageMount: text("system_storage_mount"),
+  systemStorageTotal: bigint("system_storage_total", { mode: "number" }),
+  systemStorageUsed: bigint("system_storage_used", { mode: "number" }),
+  systemStorageAvailable: bigint("system_storage_available", { mode: "number" }),
+  systemStoragePercentUsed: real("system_storage_percent_used"),
+  externalStorageMount: text("external_storage_mount"),
+  externalStorageTotal: bigint("external_storage_total", { mode: "number" }),
+  externalStorageUsed: bigint("external_storage_used", { mode: "number" }),
+  externalStorageAvailable: bigint("external_storage_available", { mode: "number" }),
+  externalStoragePercentUsed: real("external_storage_percent_used"),
+  networkInterfaceName: text("network_interface_name"),
+  networkReceivedBytes: bigint("network_received_bytes", { mode: "number" }).notNull(),
+  networkTransmittedBytes: bigint("network_transmitted_bytes", { mode: "number" }).notNull(),
+  networkReceiveRate: real("network_receive_rate"),
+  networkTransmitRate: real("network_transmit_rate"),
+}, (table) => [index("stats_recorded_at_index").on(table.recordedAt)]);

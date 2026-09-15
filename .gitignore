@@ -1,5 +1,10 @@
 node_modules/
+.pnpm-store/
+.turbo/
 .next/
+**/.turbo/
+**/.next/
+**/dist/
 out/
 .env*
 !.env.example
