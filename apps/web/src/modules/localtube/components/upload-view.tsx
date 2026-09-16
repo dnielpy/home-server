@@ -19,6 +19,7 @@ export const UploadView = () => {
   const [folder, setFolder] = useState("");
   const [uploads, setUploads] = useState<UploadItem[]>([]);
   const [dragging, setDragging] = useState(false);
+  const [selectionError, setSelectionError] = useState<string | null>(null);
   const update = (id: string, patch: Partial<UploadItem>) =>
     setUploads((items) => items.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   const upload = (file: File) =>
@@ -58,6 +59,12 @@ export const UploadView = () => {
     });
   const enqueue = (files: File[]) => {
     const accepted = files.filter(valid);
+    const rejected = files.filter((file) => !valid(file));
+    setSelectionError(
+      rejected.length
+        ? `Se omitieron ${rejected.length} archivo${rejected.length === 1 ? "" : "s"}. Solo se aceptan vídeos MP4 o WebM.`
+        : null,
+    );
     void Promise.all(accepted.map(upload));
   };
   return (
@@ -99,9 +106,14 @@ export const UploadView = () => {
           type="file"
           accept="video/mp4,video/webm,.mp4,.webm"
           multiple
-          onChange={(event) => enqueue(Array.from(event.currentTarget.files ?? []))}
+          onChange={(event) => {
+            enqueue(Array.from(event.currentTarget.files ?? []));
+            // Allow selecting the same file again after an error or a completed upload.
+            event.currentTarget.value = "";
+          }}
         />
       </label>
+      {selectionError && <p className="text-destructive mt-3 text-sm">{selectionError}</p>}
       <label className="mt-5 block max-w-md text-sm font-medium">
         <span className="flex items-center gap-2">
           <FolderPlus className="size-4" /> Carpeta opcional
