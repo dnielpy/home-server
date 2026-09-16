@@ -1,5 +1,5 @@
 import { createReadStream } from "node:fs";
-import { access, mkdir, readdir, rename, rmdir, unlink, writeFile } from "node:fs/promises";
+import { access, chmod, mkdir, readdir, rename, rmdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import {
@@ -37,10 +37,13 @@ export class UserStorageService {
 
   public async ensureUserDirectory(userName: string) {
     const directory = this.userDirectory(userName);
-    await mkdir(directory, { recursive: true, mode: 0o750 });
+    await mkdir(directory, { recursive: true, mode: 0o770 });
+    await chmod(directory, 0o770);
     await Promise.all(
       APPLICATION_DIRECTORIES.map((application) =>
-        mkdir(path.join(directory, application), { recursive: true, mode: 0o750 }),
+        mkdir(path.join(directory, application), { recursive: true, mode: 0o770 }).then(() =>
+          chmod(path.join(directory, application), 0o770),
+        ),
       ),
     );
   }
@@ -66,9 +69,9 @@ export class UserStorageService {
   }
 
   public async createUserDirectory(userName: string) {
-    await mkdir(this.root, { recursive: true, mode: 0o750 });
+    await mkdir(this.root, { recursive: true, mode: 0o770 });
     try {
-      await mkdir(this.userDirectory(userName), { mode: 0o750 });
+      await mkdir(this.userDirectory(userName), { mode: 0o770 });
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "EEXIST")
         throw new ConflictException("Ya existe una carpeta para ese usuario.");
@@ -77,7 +80,7 @@ export class UserStorageService {
     try {
       await Promise.all(
         APPLICATION_DIRECTORIES.map((application) =>
-          mkdir(path.join(this.userDirectory(userName), application), { mode: 0o750 }),
+          mkdir(path.join(this.userDirectory(userName), application), { mode: 0o770 }),
         ),
       );
     } catch (error) {
@@ -103,7 +106,7 @@ export class UserStorageService {
 
   public async renameUserDirectory(oldName: string, newName: string) {
     if (oldName === newName) return this.ensureUserDirectory(newName);
-    await mkdir(this.root, { recursive: true, mode: 0o750 });
+    await mkdir(this.root, { recursive: true, mode: 0o770 });
     try {
       await rename(this.userDirectory(oldName), this.userDirectory(newName));
     } catch (error) {

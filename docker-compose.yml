@@ -23,8 +23,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-home_server}:${POSTGRES_PASSWORD:-home_server}@postgres:5432/${POSTGRES_DB:-home_server}
       SYSTEM_DISK_MOUNT: /
       EXTERNAL_DISK_MOUNT: /app/external
-      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-Admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin1234}
       ARIA2_RPC_URL: http://aria2:6800/jsonrpc
       ARIA2_RPC_SECRET: ${ARIA2_RPC_SECRET:?Set ARIA2_RPC_SECRET in .env}
       ARIA2_DOWNLOAD_ROOT: /app/external
@@ -58,6 +58,10 @@ services:
     environment:
       ARIA2_RPC_SECRET: ${ARIA2_RPC_SECRET:?Set ARIA2_RPC_SECRET in .env}
       DOWNLOAD_DIR: /app/external
+    # The API creates the shared data directories as root:root. The aria2
+    # user gets group 0 so it can write only where those directories grant it access.
+    group_add:
+      - "0"
     volumes:
       - ${EXTERNAL_DISK_MOUNT:-./Download/test}:/app/external
       - aria2-state:/config
