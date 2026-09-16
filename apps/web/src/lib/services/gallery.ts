@@ -1,6 +1,5 @@
 "use server";
 
-import { RestFactory } from "@home-server/core/http";
 import type { Result } from "@home-server/core/types";
 import {
   galleryAlbumsResponseSchema,
@@ -9,26 +8,25 @@ import {
   type GalleryMediaPage,
 } from "@home-server/contracts/gallery";
 import { API_ROUTES } from "@/src/routes";
-
-type MediaQuery = { cursor?: string; limit?: number; albumId?: string };
-
-const mediaCommand = RestFactory.createGet<GalleryMediaPage, MediaQuery>(API_ROUTES.gallery.media, {
-  cache: "no-store",
-  buildRequest: (query) => ({ query }),
-  parse: galleryMediaPageSchema.parse,
-});
-const albumsCommand = RestFactory.createGet<{ albums: GalleryAlbumSummary[] }>(API_ROUTES.gallery.albums, {
-  cache: "no-store",
-  parse: galleryAlbumsResponseSchema.parse,
-});
+import { authenticatedApiRequest } from "@/src/modules/auth/server/session";
 
 export const getGalleryMedia = async (
   albumId?: string,
   cursor?: string,
   limit = 60,
-): Promise<Result<GalleryMediaPage>> => mediaCommand.execute({ albumId, cursor, limit });
+): Promise<Result<GalleryMediaPage>> => {
+  const query = new URLSearchParams();
+  if (albumId) query.set("albumId", albumId);
+  if (cursor) query.set("cursor", cursor);
+  query.set("limit", String(limit));
+  return authenticatedApiRequest(`${API_ROUTES.gallery.media}?${query.toString()}`, galleryMediaPageSchema.parse, {
+    cache: "no-store",
+  });
+};
 
 export const getGalleryAlbums = async (): Promise<Result<GalleryAlbumSummary[]>> => {
-  const result = await albumsCommand.execute();
+  const result = await authenticatedApiRequest(API_ROUTES.gallery.albums, galleryAlbumsResponseSchema.parse, {
+    cache: "no-store",
+  });
   return result.success ? { success: true, data: result.data.albums } : result;
 };

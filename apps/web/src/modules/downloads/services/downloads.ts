@@ -1,13 +1,9 @@
 "use server";
 
-import { RestFactory } from "@home-server/core/http";
 import type { Result } from "@home-server/core/types";
 import { downloadsResponseSchema, type DownloadsResponse } from "@home-server/contracts/downloads";
 import { API_ROUTES } from "@/src/routes";
+import { authenticatedApiRequest } from "@/src/modules/auth/server/session";
 
-const downloadsCommand = RestFactory.createGet<DownloadsResponse>(API_ROUTES.downloads, {
-  cache: "no-store",
-  parse: downloadsResponseSchema.parse,
-});
-
-export const getDownloads = async (): Promise<Result<DownloadsResponse>> => downloadsCommand.execute();
+export const getDownloads = async (): Promise<Result<DownloadsResponse>> =>
+  authenticatedApiRequest(API_ROUTES.downloads, downloadsResponseSchema.parse, { cache: "no-store" });

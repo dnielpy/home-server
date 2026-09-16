@@ -1,4 +1,5 @@
 export { revalidateRestCache } from "./cache";
+export { RestErrorHandler } from "./error-handler";
 export { RestFactory } from "./rest-operation-factory";
 export type { RestCommand } from "./rest-command";
 export { RestFactoryConfigError, type RequestContext, type RequestPatch, type RestFactoryConfig } from "./rest-config";

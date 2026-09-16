@@ -1,10 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { RestFactory } from "@home-server/core/http";
-import { bootstrapRest } from "@/src/lib/http/bootstrap-rest";
 import { getLocalTubeVideo, getLocalTubeVideos } from "@/src/lib/services/localtube";
 
 afterEach(() => {
-  RestFactory.reset();
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
@@ -30,9 +27,8 @@ describe("LocalTube service", () => {
       )
       .mockResolvedValueOnce(
         new Response(JSON.stringify(video), { status: 200, headers: { "content-type": "application/json" } }),
-      );
+    );
     vi.stubGlobal("fetch", fetchMock);
-    bootstrapRest();
 
     await expect(getLocalTubeVideos("mi vídeo", "cursor-value")).resolves.toMatchObject({
       success: true,

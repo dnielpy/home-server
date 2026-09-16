@@ -1,10 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { RestFactory } from "@home-server/core/http";
-import { bootstrapRest } from "@/src/lib/http/bootstrap-rest";
 import { getLiveStats, getWeeklyNetworkHistory } from "@/src/lib/services/stats";
 
 afterEach(() => {
-  RestFactory.reset();
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
@@ -15,19 +12,31 @@ describe("stats service", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ current: {}, networkHistory: [] }), {
+        new Response(
+          JSON.stringify({
+            current: {
+              updatedAt: "2026-09-16T00:00:00.000Z",
+              cpu: { used: 20, idle: 80 },
+              memory: { total: 100, used: 50, available: 50, percentUsed: 50 },
+              systemStorage: null,
+              externalStorage: null,
+              network: { interfaceName: "eth0", receivedBytes: 1, transmittedBytes: 2, receiveRate: 0, transmitRate: 0 },
+            },
+            networkHistory: [],
+          }),
+          {
           status: 200,
           headers: { "content-type": "application/json" },
-        }),
+          },
+        ),
       )
       .mockResolvedValueOnce(
         new Response(JSON.stringify({ period: "7d", intervalMinutes: 15, points: [] }), {
           status: 200,
           headers: { "content-type": "application/json" },
         }),
-      );
+    );
     vi.stubGlobal("fetch", fetchMock);
-    bootstrapRest();
 
     await expect(getLiveStats()).resolves.toMatchObject({ success: true, data: { networkHistory: [] } });
     await expect(getWeeklyNetworkHistory()).resolves.toMatchObject({

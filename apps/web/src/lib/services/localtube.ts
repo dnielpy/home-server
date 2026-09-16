@@ -1,6 +1,5 @@
 "use server";
 
-import { RestFactory } from "@home-server/core/http";
 import type { Result } from "@home-server/core/types";
 import {
   localTubeVideoPageSchema,
@@ -9,27 +8,29 @@ import {
   type LocalTubeVideoPage,
 } from "@home-server/contracts/localtube";
 import { API_ROUTES } from "@/src/routes";
-
-type VideosQuery = { q?: string; cursor?: string; limit?: number; excludeId?: string };
-
-const videosCommand = RestFactory.createGet<LocalTubeVideoPage, VideosQuery>(API_ROUTES.localTube.videos, {
-  cache: "no-store",
-  buildRequest: (query) => ({ query }),
-  parse: localTubeVideoPageSchema.parse,
-});
+import { authenticatedApiRequest } from "@/src/modules/auth/server/session";
 
 export async function getLocalTubeVideos(
   query = "",
   cursor?: string,
   excludeId?: string,
 ): Promise<Result<LocalTubeVideoPage>> {
-  return videosCommand.execute({ q: query || undefined, cursor, limit: 12, excludeId });
+  const search = new URLSearchParams();
+  if (query) search.set("q", query);
+  if (cursor) search.set("cursor", cursor);
+  if (excludeId) search.set("excludeId", excludeId);
+  search.set("limit", "12");
+  return authenticatedApiRequest(`${API_ROUTES.localTube.videos}?${search.toString()}`, localTubeVideoPageSchema.parse, {
+    cache: "no-store",
+  });
 }
 
 export const getLocalTubeVideo = async (videoId: string): Promise<Result<LocalTubeVideo>> => {
-  const command = RestFactory.createGet(`${API_ROUTES.localTube.videos}/${encodeURIComponent(videoId)}`, {
+  return authenticatedApiRequest(
+    `${API_ROUTES.localTube.videos}/${encodeURIComponent(videoId)}`,
+    localTubeVideoSchema.parse,
+    {
     cache: "no-store",
-    parse: localTubeVideoSchema.parse,
-  });
-  return command.execute();
+    },
+  );
 };

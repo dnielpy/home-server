@@ -2,6 +2,8 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { RestErrorHandler } from "@home-server/core/http";
+import type { Result } from "@home-server/core/types";
 import { userDtoSchema, type UserDto } from "@home-server/contracts/users";
 
 export const SESSION_COOKIE = "home_server_session";
@@ -14,7 +16,11 @@ export function toBrowserUser(user: UserDto): UserDto {
 }
 
 export async function getSessionToken() {
-  return (await cookies()).get(SESSION_COOKIE)?.value;
+  try {
+    return (await cookies()).get(SESSION_COOKIE)?.value;
+  } catch {
+    return undefined;
+  }
 }
 
 export async function apiFetch(path: string, init: RequestInit = {}, token?: string) {
@@ -23,6 +29,27 @@ export async function apiFetch(path: string, init: RequestInit = {}, token?: str
   headers.set("Accept", "application/json");
   if (sessionToken) headers.set("Authorization", `Bearer ${sessionToken}`);
   return fetch(new URL(path, process.env.API_URL).toString(), { ...init, headers, cache: "no-store" });
+}
+
+export async function authenticatedApiRequest<T>(
+  path: string,
+  parse: (value: unknown) => T,
+  init: RequestInit = {},
+): Promise<Result<T>> {
+  const method = init.method ?? "GET";
+  const request = { method, url: new URL(path, process.env.API_URL).toString() };
+  try {
+    const response = await apiFetch(path, { ...init, method });
+    const result = await RestErrorHandler.handleResponse<unknown>(response, request);
+    if (!result.success) return result;
+    try {
+      return { success: true, data: parse(result.data) };
+    } catch (error) {
+      return RestErrorHandler.handleGenericError<T>(error);
+    }
+  } catch (error) {
+    return RestErrorHandler.handleGenericError<T>(error);
+  }
 }
 
 export async function getCurrentUser(): Promise<UserDto | null> {

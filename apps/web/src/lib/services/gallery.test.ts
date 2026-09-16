@@ -1,10 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { RestFactory } from "@home-server/core/http";
-import { bootstrapRest } from "@/src/lib/http/bootstrap-rest";
 import { getGalleryAlbums, getGalleryMedia } from "./gallery";
 
 afterEach(() => {
-  RestFactory.reset();
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
@@ -35,9 +32,8 @@ describe("Gallery service", () => {
           JSON.stringify({ albums: [{ id: "b".repeat(32), name: "Familia", itemCount: 1, cover: image }] }),
           { headers: { "content-type": "application/json" } },
         ),
-      );
+    );
     vi.stubGlobal("fetch", fetchMock);
-    bootstrapRest();
 
     await expect(getGalleryMedia("album-1")).resolves.toMatchObject({ success: true, data: { nextCursor: "next" } });
     await expect(getGalleryAlbums()).resolves.toMatchObject({ success: true, data: [{ name: "Familia" }] });

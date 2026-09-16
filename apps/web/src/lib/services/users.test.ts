@@ -1,6 +1,4 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { RestFactory } from "@home-server/core/http";
-import { bootstrapRest } from "@/src/lib/http/bootstrap-rest";
 import { createUser, deleteUser, getUsers, updateUser } from "@/src/lib/services/users";
 
 const apiUser = {
@@ -13,7 +11,6 @@ const apiUser = {
 };
 
 afterEach(() => {
-  RestFactory.reset();
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
 });
@@ -46,9 +43,8 @@ describe("users service", () => {
           status: 200,
           headers: { "content-type": "application/json" },
         }),
-      );
+    );
     vi.stubGlobal("fetch", fetchMock);
-    bootstrapRest();
 
     await expect(getUsers()).resolves.toMatchObject({
       success: true,
