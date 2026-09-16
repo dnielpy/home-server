@@ -28,6 +28,10 @@
     "./gallery": {
       "types": "./dist/gallery.d.ts",
       "default": "./dist/gallery.js"
+    },
+    "./downloads": {
+      "types": "./dist/downloads.d.ts",
+      "default": "./dist/downloads.js"
     }
   },
   "scripts": {

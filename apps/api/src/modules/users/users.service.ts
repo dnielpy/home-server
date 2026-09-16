@@ -4,6 +4,7 @@ import { db, users } from "@home-server/database";
 import { AuthService, hashPassword, toUserDto, validatePassword, validateUserName } from "../auth/auth.service";
 import type { UserDto } from "@home-server/contracts";
 import { UserStorageService, type PhotoUpload } from "../storage/user-storage.service";
+import { DownloadsService } from "../downloads/downloads.service";
 
 export type UpdateUserInput = {
   name: string;
@@ -19,6 +20,8 @@ export class UsersService {
     private readonly authService: AuthService,
     @Inject(UserStorageService)
     private readonly userStorage: UserStorageService,
+    @Inject(DownloadsService)
+    private readonly downloads: DownloadsService,
   ) {}
 
   public async list(): Promise<UserDto[]> {
@@ -69,7 +72,10 @@ export class UsersService {
     let nextPhotoPath = current.photoPath;
     let newPhotoPath: string | null = null;
     const renamed = current.name !== name;
-    if (renamed) await this.userStorage.renameUserDirectory(current.name, name);
+    if (renamed) {
+      await this.downloads.assertUserCanChangeStorage(id);
+      await this.userStorage.renameUserDirectory(current.name, name);
+    }
 
     const credentials = input.password
       ? await (async () => {
@@ -111,6 +117,7 @@ export class UsersService {
     const current = await this.authService.findById(id);
     if (!current) throw new NotFoundException("Usuario no encontrado.");
     if (current.isAdmin) throw new ForbiddenException("El administrador no puede eliminarse.");
+    await this.downloads.assertUserCanChangeStorage(id);
     await db.delete(users).where(eq(users.id, id));
     await this.userStorage.removePhoto(current.name, current.photoPath);
     return toUserDto(current);

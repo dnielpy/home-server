@@ -25,10 +25,17 @@ services:
       EXTERNAL_DISK_MOUNT: /app/external
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ARIA2_RPC_URL: http://aria2:6800/jsonrpc
+      ARIA2_RPC_SECRET: ${ARIA2_RPC_SECRET:?Set ARIA2_RPC_SECRET in .env}
+      ARIA2_DOWNLOAD_ROOT: /app/external
+      ARIA2_EVENTS_DIR: /app/aria2-events/events
     volumes:
       - ${EXTERNAL_DISK_MOUNT:-./Download/test}:/app/external
+      - aria2-events:/app/aria2-events:ro
     depends_on:
       postgres:
+        condition: service_healthy
+      aria2:
         condition: service_healthy
     restart: unless-stopped
 
@@ -45,5 +52,26 @@ services:
       - api
     restart: unless-stopped
 
+  aria2:
+    build:
+      context: ./docker/aria2
+    environment:
+      ARIA2_RPC_SECRET: ${ARIA2_RPC_SECRET:?Set ARIA2_RPC_SECRET in .env}
+      DOWNLOAD_DIR: /app/external
+    volumes:
+      - ${EXTERNAL_DISK_MOUNT:-./Download/test}:/app/external
+      - aria2-state:/config
+      - aria2-events:/state
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/aria2-healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+    stop_grace_period: 30s
+
 volumes:
   postgres-data:
+  aria2-state:
+  aria2-events:

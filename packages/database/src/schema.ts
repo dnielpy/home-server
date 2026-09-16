@@ -45,6 +45,51 @@ export const sessions = pgTable(
   ],
 );
 
+export const downloads = pgTable(
+  "downloads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    gid: text("gid").notNull(),
+    url: text("url").notNull(),
+    destination: text("destination").notNull(),
+    fileName: text("file_name").notNull(),
+    totalBytes: bigint("total_bytes", { mode: "number" }).notNull().default(0),
+    completedBytes: bigint("completed_bytes", { mode: "number" }).notNull().default(0),
+    status: text("status").notNull().default("waiting"),
+    libraryStatus: text("library_status").notNull().default("pending"),
+    errorMessage: text("error_message"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("downloads_gid_unique").on(table.gid),
+    index("downloads_user_id_index").on(table.userId),
+    index("downloads_user_created_at_index").on(table.userId, table.createdAt),
+  ],
+);
+
+export const downloadAttempts = pgTable(
+  "download_attempts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    downloadId: uuid("download_id")
+      .notNull()
+      .references(() => downloads.id, { onDelete: "cascade" }),
+    gid: text("gid").notNull(),
+    status: text("status").notNull(),
+    errorMessage: text("error_message"),
+    startedAt: timestamp("started_at", { withTimezone: true, mode: "date" }).notNull(),
+    finishedAt: timestamp("finished_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("download_attempts_gid_unique").on(table.gid),
+    index("download_attempts_download_id_index").on(table.downloadId),
+  ],
+);
+
 export const networkTotals = pgTable("network_totals", {
   id: integer("id").primaryKey(),
   interfaceName: text("interface_name"),

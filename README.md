@@ -15,6 +15,8 @@ El frontend ejecuta sus servicios server-side contra la API de Nest; el navegado
 
 LocalTube está disponible en `/localtube`. La lógica de exploración, subida, streaming con rangos, duración y miniaturas se ejecuta en la API; el frontend usa sus handlers BFF para mantener la sesión fuera del navegador.
 
+Descargas está disponible en `/downloads`. Cada descarga pertenece al usuario autenticado y se encola en aria2 desde la API. Al crearla se elige `gallery` o `local-tube`; el archivo se guarda directamente en la raíz privada de ese destino. Solo se aceptan enlaces HTTP/HTTPS directos. Los formatos no compatibles se conservan, pero se marcan como no indexables en el panel.
+
 ## Docker
 
 ```bash
@@ -35,6 +37,10 @@ En producción, solo el servicio `api` comparte los namespaces de red y procesos
 
 El proceso debe permanecer en una red privada o detrás de un proxy autenticado; no expongas directamente a Internet un contenedor que puede leer información del host.
 
+## Descargas persistentes
+
+Compose inicia también aria2. Define `ARIA2_RPC_SECRET` en `.env`; el RPC se mantiene en la red interna en desarrollo y solo en loopback en producción. La sesión de aria2 y los marcadores de finalización viven en volúmenes separados para que las tareas continúen aunque el navegador o la API se reinicien. El historial de descargas se guarda en PostgreSQL y comienza nuevo en Home Server; no se importa el manifiesto JSON de la aplicación anterior.
+
 ## Datos de usuarios en el disco externo
 
 El API usa `EXTERNAL_DISK_MOUNT` como raíz de datos. Al iniciar, crea las carpetas de cada usuario y las aplicaciones disponibles:
@@ -50,6 +56,6 @@ Download/test/
     └── gallery/
 ```
 
-Cada usuario solo accede a `EXTERNAL_DISK_MOUNT/<usuario>/local-tube`, donde LocalTube conserva los vídeos MP4/WebM y su caché oculta de miniaturas. Las carpetas antiguas `streamlt/` no se migran ni se eliminan: se preservan sin usar.
+Cada usuario solo accede a sus carpetas `EXTERNAL_DISK_MOUNT/<usuario>/local-tube` y `EXTERNAL_DISK_MOUNT/<usuario>/gallery`. LocalTube conserva los vídeos MP4/WebM y su caché oculta de miniaturas; Downloads escribe en la raíz del destino elegido. Las carpetas antiguas `streamlt/` no se migran ni se eliminan: se preservan sin usar.
 
 En `docker-compose.yml`, `EXTERNAL_DISK_MOUNT` se interpreta como una ruta del host y se monta en `/app/external`. En producción se monta en `/host-external` con permisos de lectura y escritura para que el API pueda crear usuarios y guardar sus fotos.

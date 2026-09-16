@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChartNoAxesCombined, LayoutDashboard, Clapperboard, Images } from "lucide-react";
+import { ChartNoAxesCombined, LayoutDashboard, Clapperboard, Images, Download } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { UserDto } from "@home-server/contracts/users";
 import { Users } from "lucide-react";
@@ -11,6 +11,7 @@ const navigation = [
   { href: "/stats", label: "Server", icon: ChartNoAxesCombined },
   { href: "/localtube", label: "LocalTube", icon: Clapperboard },
   { href: "/gallery", label: "Gallery", icon: Images },
+  { href: "/downloads", label: "Descargas", icon: Download },
 ];
 
 export const Sidebar = ({ user }: { user: UserDto }) => {
@@ -18,7 +19,10 @@ export const Sidebar = ({ user }: { user: UserDto }) => {
   const items = user.isAdmin ? [...navigation, { href: "/users", label: "Usuarios", icon: Users }] : navigation;
 
   const links = items.map(({ href, label, icon: Icon }) => {
-    const active = href === "/localtube" || href === "/gallery" ? pathname.startsWith(href) : pathname === href;
+    const active =
+      href === "/localtube" || href === "/gallery" || href === "/downloads"
+        ? pathname.startsWith(href)
+        : pathname === href;
 
     return (
       <Link

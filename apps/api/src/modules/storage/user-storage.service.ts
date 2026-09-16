@@ -17,6 +17,7 @@ const PHOTO_TYPES = new Map([
   ["image/webp", ".webp"],
 ]);
 const APPLICATION_DIRECTORIES = ["local-tube", "gallery"] as const;
+type DownloadDestination = "gallery" | "localtube";
 
 export type PhotoUpload = { buffer: Buffer; mimetype: string };
 
@@ -52,6 +53,16 @@ export class UserStorageService {
   public async ensureGalleryDirectory(userName: string) {
     await this.ensureUserDirectory(userName);
     return path.join(this.userDirectory(userName), "gallery");
+  }
+
+  public async ensureDownloadDirectory(userName: string, destination: DownloadDestination) {
+    return destination === "gallery" ? this.ensureGalleryDirectory(userName) : this.ensureLocalTubeDirectory(userName);
+  }
+
+  public aria2DownloadDirectory(userName: string, destination: DownloadDestination) {
+    const root = process.env.ARIA2_DOWNLOAD_ROOT?.trim();
+    if (!root) throw new Error("ARIA2_DOWNLOAD_ROOT no está configurado.");
+    return path.join(root, userName, destination === "gallery" ? "gallery" : "local-tube");
   }
 
   public async createUserDirectory(userName: string) {

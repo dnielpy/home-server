@@ -7,6 +7,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
 import { LocalTubeModule } from "./modules/localtube/localtube.module";
 import { GalleryModule } from "./modules/gallery/gallery.module";
+import { DownloadsModule } from "./modules/downloads/downloads.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GalleryModule } from "./modules/gallery/gallery.module";
     StatsModule,
     LocalTubeModule,
     GalleryModule,
+    DownloadsModule,
   ],
 })
 export class AppModule {}
