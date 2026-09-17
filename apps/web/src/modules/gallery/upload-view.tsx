@@ -87,7 +87,7 @@ export function GalleryUploadView() {
   };
   return (
     <section className="mx-auto max-w-6xl">
-      <header className="mb-6 flex items-end justify-between gap-4">
+      <header className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-primary text-xs font-semibold tracking-wider uppercase">Gallery</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Subir archivos</h1>
@@ -97,7 +97,7 @@ export function GalleryUploadView() {
         </div>
         <Link
           href="/gallery"
-          className="text-muted-foreground hover:bg-muted inline-flex h-9 items-center gap-1.5 rounded-full px-2 text-sm font-medium"
+          className="text-muted-foreground hover:bg-muted inline-flex h-10 items-center gap-1.5 rounded-full px-2 text-sm font-medium sm:h-9"
         >
           <ArrowLeft className="size-5" /> Atrás
         </Link>
@@ -132,14 +132,14 @@ export function GalleryUploadView() {
           <h2 className="font-semibold">
             Destino de {files.length} {files.length === 1 ? "archivo" : "archivos"}
           </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            <label className="flex gap-2 text-sm">
+          <div className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
+            <label className="hover:bg-muted flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm">
               <input type="radio" checked={target === "root"} onChange={() => setTarget("root")} /> Biblioteca
             </label>
-            <label className="flex gap-2 text-sm">
+            <label className="hover:bg-muted flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm">
               <input type="radio" checked={target === "album"} onChange={() => setTarget("album")} /> Álbum existente
             </label>
-            <label className="flex gap-2 text-sm">
+            <label className="hover:bg-muted flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm">
               <input type="radio" checked={target === "folder"} onChange={() => setTarget("folder")} /> Nueva carpeta
             </label>
           </div>
@@ -171,7 +171,7 @@ export function GalleryUploadView() {
             type="button"
             onClick={start}
             disabled={target === "album" && !albumId}
-            className="bg-primary text-primary-foreground mt-5 rounded-full px-5 py-2.5 text-sm font-semibold disabled:opacity-50"
+            className="bg-primary text-primary-foreground mt-5 min-h-11 rounded-full px-5 py-2.5 text-sm font-semibold disabled:opacity-50"
           >
             Iniciar subida
           </button>

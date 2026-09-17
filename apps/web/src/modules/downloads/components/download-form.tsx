@@ -50,7 +50,7 @@ export const DownloadForm = ({
         <option value="gallery">Gallery</option>
         <option value="localtube">LocalTube</option>
       </select>
-      <Button type="submit" size="lg" disabled={isSubmitting || !url.trim() || !destination}>
+      <Button className="w-full md:w-auto" type="submit" size="lg" disabled={isSubmitting || !url.trim() || !destination}>
         {isSubmitting ? <LoaderCircle className="animate-spin" /> : <DownloadIcon />}
         {isSubmitting ? "Añadiendo…" : "Descargar"}
       </Button>

@@ -17,7 +17,7 @@ export default async function LocalTubePage({ searchParams }: { searchParams: Pr
         <VideoSearch initialQuery={query} />
         <Link
           href="/localtube/upload"
-          className="bg-muted text-foreground hover:bg-muted/70 focus-visible:ring-ring inline-flex h-9 w-fit items-center justify-center gap-1.5 justify-self-end rounded-full px-4 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          className="bg-muted text-foreground hover:bg-muted/70 focus-visible:ring-ring inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none sm:h-9 sm:w-fit sm:justify-self-end"
         >
           <Plus className="size-4" strokeWidth={2.25} /> Subir
         </Link>

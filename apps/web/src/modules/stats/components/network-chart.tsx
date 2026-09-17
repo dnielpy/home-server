@@ -27,7 +27,7 @@ export const NetworkChart = ({ network, history }: NetworkChartProps) => {
                 : "No hay una interfaz de red predeterminada disponible."}
             </CardDescription>
           </div>
-          <div className="text-muted-foreground flex gap-2 text-xs">
+          <div className="text-muted-foreground flex flex-wrap gap-2 text-xs">
             <span className="bg-muted rounded-full px-2.5 py-1">Últimos 5 minutos</span>
             <span className="bg-muted rounded-full px-2.5 py-1">Actualiza cada 5 s</span>
           </div>
@@ -50,7 +50,7 @@ export const NetworkChart = ({ network, history }: NetworkChartProps) => {
             <p className="text-muted-foreground mt-1 text-xs">Total: {formatBytes(network.transmittedBytes)}</p>
           </div>
         </div>
-        <div className="mt-5 h-72" aria-label="Gráfica de velocidad de red">
+        <div className="mt-5 h-64 sm:h-72" aria-label="Gráfica de velocidad de red">
           <ResponsiveContainer height="100%" width="100%">
             <LineChart data={history} margin={{ top: 8, right: 8, left: 4, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-border" />

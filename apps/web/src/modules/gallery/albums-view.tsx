@@ -8,12 +8,12 @@ export function AlbumsView({ albums, error }: { albums: GalleryAlbumSummaryView[
     return <Message title="Todavía no hay álbumes" message="Crea una subcarpeta al subir archivos para verla aquí." />;
   return (
     <section className="mx-auto max-w-[1800px]">
-      <header className="mb-7 flex items-end justify-between gap-4">
+      <header className="mb-7 flex flex-wrap items-start justify-between gap-3 sm:items-end sm:gap-4">
         <div>
           <p className="text-primary text-xs font-semibold tracking-wider uppercase">Gallery</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Álbumes</h1>
         </div>
-        <span className="text-muted-foreground text-sm">
+        <span className="text-muted-foreground shrink-0 text-sm">
           {albums.length} {albums.length === 1 ? "álbum" : "álbumes"}
         </span>
       </header>

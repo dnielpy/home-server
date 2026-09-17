@@ -69,7 +69,7 @@ export const UploadView = () => {
   };
   return (
     <section className="mx-auto max-w-[1200px]">
-      <div className="mb-6 flex items-end justify-between gap-4">
+      <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-muted-foreground text-xs font-semibold tracking-[0.16em] uppercase">LocalTube</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Subir vídeos</h1>
@@ -78,7 +78,7 @@ export const UploadView = () => {
         <Link
           href="/localtube"
           aria-label="Volver a la biblioteca"
-          className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring inline-flex h-9 items-center gap-1.5 rounded-full px-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring inline-flex h-10 items-center gap-1.5 rounded-full px-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none sm:h-9"
         >
           <ArrowLeft className="size-5" strokeWidth={1.75} />
           Atrás

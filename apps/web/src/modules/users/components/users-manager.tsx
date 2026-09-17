@@ -255,7 +255,7 @@ export const UsersManager = ({ initialUsers }: { initialUsers: UserDto[] }) => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="user-editor-title"
-            className="border-border bg-card w-full max-w-lg rounded-2xl border shadow-2xl"
+            className="border-border bg-card max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl border shadow-2xl"
           >
             <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-2">
               <div>
@@ -399,7 +399,7 @@ export const UsersManager = ({ initialUsers }: { initialUsers: UserDto[] }) => {
             role="alertdialog"
             aria-modal="true"
             aria-labelledby="delete-user-title"
-            className="border-border bg-card w-full max-w-md rounded-2xl border p-6 shadow-2xl"
+            className="border-border bg-card max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border p-5 shadow-2xl sm:p-6"
           >
             <h2 id="delete-user-title" className="text-xl font-semibold">
               ¿Eliminar a {deleteTarget.name}?

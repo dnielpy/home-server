@@ -107,7 +107,7 @@ export function GalleryView({ title, albumId, initialPage, initialError }: Galle
   return (
     <>
       <section ref={root} className="mx-auto max-w-[1800px]">
-        <header className="mb-7 flex items-end justify-between gap-4 px-1">
+        <header className="mb-7 flex flex-wrap items-start justify-between gap-3 px-1 sm:items-end sm:gap-4">
           <div>
             {albumId ? (
               <Link
@@ -121,7 +121,7 @@ export function GalleryView({ title, albumId, initialPage, initialError }: Galle
             )}
             <h1 className="mt-1 text-3xl font-semibold tracking-tight">{title}</h1>
           </div>
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted-foreground shrink-0 text-sm">
             {items.length}
             {cursor ? "+" : ""} elementos
           </span>

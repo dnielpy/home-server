@@ -94,7 +94,7 @@ export function MediaViewer({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <header className="flex h-16 shrink-0 items-center gap-3 bg-gradient-to-b from-black/80 to-transparent px-3 sm:px-5">
+      <header className="flex h-16 shrink-0 items-center gap-3 bg-gradient-to-b from-black/80 to-transparent px-3 pt-[env(safe-area-inset-top)] sm:px-5">
         <button
           ref={close}
           type="button"
@@ -147,7 +147,7 @@ function Navigate({
       aria-label={isPrevious ? "Elemento anterior" : "Elemento siguiente"}
       disabled={disabled}
       onClick={onClick}
-      className={`absolute top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white shadow-lg hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none disabled:hidden sm:grid ${isPrevious ? "left-2" : "right-2"}`}
+      className={`absolute top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white shadow-lg hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none disabled:hidden sm:size-11 ${isPrevious ? "left-2" : "right-2"}`}
     >
       {isPrevious ? <ChevronLeft /> : <ChevronRight />}
     </button>
@@ -201,12 +201,12 @@ function PhotoViewer({ media }: { media: GalleryMediaView }) {
           cursor: zoom > 1 ? "grab" : "zoom-in",
         }}
       />
-      <div className="absolute right-3 bottom-3 flex items-center rounded-full bg-black/65 p-1 text-white backdrop-blur">
+      <div className="absolute right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] flex items-center rounded-full bg-black/65 p-1 text-white backdrop-blur">
         <button
           type="button"
           aria-label="Alejar"
           onClick={() => setNextZoom(zoom - 0.25)}
-          className="grid size-9 place-items-center rounded-full hover:bg-white/15"
+          className="grid size-10 place-items-center rounded-full hover:bg-white/15"
         >
           <Minus className="size-4" />
         </button>
@@ -215,7 +215,7 @@ function PhotoViewer({ media }: { media: GalleryMediaView }) {
           type="button"
           aria-label="Acercar"
           onClick={() => setNextZoom(zoom + 0.25)}
-          className="grid size-9 place-items-center rounded-full hover:bg-white/15"
+          className="grid size-10 place-items-center rounded-full hover:bg-white/15"
         >
           <Plus className="size-4" />
         </button>
@@ -223,7 +223,7 @@ function PhotoViewer({ media }: { media: GalleryMediaView }) {
           type="button"
           aria-label="Restablecer zoom"
           onClick={reset}
-          className="grid size-9 place-items-center rounded-full hover:bg-white/15"
+          className="grid size-10 place-items-center rounded-full hover:bg-white/15"
         >
           <RotateCcw className="size-4" />
         </button>
@@ -273,7 +273,7 @@ function VideoPlayer({ media }: { media: GalleryMediaView }) {
         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
         onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
       />
-      <div className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/85 to-transparent px-3 pt-12 pb-3">
+      <div className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/85 to-transparent px-3 pt-12 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <input
           aria-label="Posición del vídeo"
           type="range"
@@ -293,7 +293,7 @@ function VideoPlayer({ media }: { media: GalleryMediaView }) {
             type="button"
             aria-label={playing ? "Pausar" : "Reproducir"}
             onClick={() => void toggle()}
-            className="grid size-9 place-items-center rounded-full hover:bg-white/15"
+            className="grid size-10 place-items-center rounded-full hover:bg-white/15"
           >
             {playing ? <Pause className="size-5" /> : <Play className="size-5" />}
           </button>
@@ -303,7 +303,7 @@ function VideoPlayer({ media }: { media: GalleryMediaView }) {
             onClick={() => {
               if (video.current) video.current.muted = !video.current.muted;
             }}
-            className="grid size-9 place-items-center rounded-full hover:bg-white/15"
+            className="grid size-10 place-items-center rounded-full hover:bg-white/15"
           >
             {muted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
           </button>
@@ -314,7 +314,7 @@ function VideoPlayer({ media }: { media: GalleryMediaView }) {
             type="button"
             aria-label="Pantalla completa"
             onClick={() => video.current?.requestFullscreen()}
-            className="ml-auto grid size-9 place-items-center rounded-full hover:bg-white/15"
+            className="ml-auto grid size-10 place-items-center rounded-full hover:bg-white/15"
           >
             <Maximize className="size-5" />
           </button>

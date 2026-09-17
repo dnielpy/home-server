@@ -32,7 +32,7 @@ export const NetworkHistoryChart = ({ history }: NetworkHistoryChartProps) => {
         </div>
       </CardHeader>
       <CardContent className="p-5">
-        <div className="h-72" aria-label="Gráfica semanal de velocidad de red">
+        <div className="h-64 sm:h-72" aria-label="Gráfica semanal de velocidad de red">
           <ResponsiveContainer height="100%" width="100%">
             <LineChart data={history} margin={{ top: 8, right: 8, left: 4, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-border" />
