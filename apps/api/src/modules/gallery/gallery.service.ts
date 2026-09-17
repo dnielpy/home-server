@@ -215,7 +215,8 @@ export class GalleryService {
     } catch {
       // Generate on cache miss.
     }
-    const temporary = `${cachePath}.${randomUUID()}.tmp`;
+    // Keep the media extension at the end so ffmpeg can infer the JPEG output format.
+    const temporary = `${cachePath}.${randomUUID()}.tmp.${media.kind === "image" ? "webp" : "jpg"}`;
     try {
       await mkdir(cacheRoot, { recursive: true, mode: 0o750 });
       const generated =
