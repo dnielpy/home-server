@@ -5,7 +5,7 @@ export type GalleryMediaPageView = { items: GalleryMediaView[]; nextCursor: stri
 export type GalleryAlbumSummaryView = Omit<GalleryAlbumSummary, "cover"> & { cover: GalleryMediaView | null };
 
 export function toGalleryMediaView(media: GalleryMedia): GalleryMediaView {
-  const version = `${media.size}-${encodeURIComponent(media.modifiedAt)}`;
+  const version = `v2-${media.size}-${encodeURIComponent(media.modifiedAt)}`;
   const root = `/api/gallery/media/${encodeURIComponent(media.id)}`;
   return { ...media, contentUrl: `${root}/content?v=${version}`, thumbnailUrl: `${root}/thumbnail?v=${version}` };
 }
