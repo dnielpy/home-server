@@ -2,6 +2,7 @@
 
 import { ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
 import { Card, CardContent } from "@/src/modules/common/components/card";
+import { PageSection } from "@/src/modules/common/components/page-section";
 import type { NetworkMetric } from "@/src/modules/stats/types";
 import { formatBytes } from "@/src/modules/stats/utils/format";
 
@@ -11,7 +12,7 @@ type NetworkTotalCardsProps = {
 
 export const NetworkTotalCards = ({ network }: NetworkTotalCardsProps) => {
   return (
-    <section aria-labelledby="network-total-title">
+    <PageSection className="mt-5" aria-labelledby="network-total-title">
       <h2 id="network-total-title" className="sr-only">
         Tráfico total de red
       </h2>
@@ -35,6 +36,6 @@ export const NetworkTotalCards = ({ network }: NetworkTotalCardsProps) => {
           </CardContent>
         </Card>
       </div>
-    </section>
+    </PageSection>
   );
 };
