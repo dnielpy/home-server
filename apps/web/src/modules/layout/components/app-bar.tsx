@@ -1,43 +1,37 @@
 "use client";
 
-import Link from "next/link";
-import { Menu, Server, X } from "lucide-react";
-import { UserMenu } from "@/src/modules/layout/components/user-menu";
+import { usePathname } from "next/navigation";
 import type { UserDto } from "@home-server/contracts/users";
+import { Separator } from "@/src/modules/common/components/separator";
+import { SidebarTrigger } from "@/src/modules/common/components/sidebar";
+import { UserMenu } from "@/src/modules/layout/components/user-menu";
 
-export const AppBar = ({
-  user,
-  mobileNavigationOpen,
-  onMobileNavigationToggle,
-}: {
-  user: UserDto;
-  mobileNavigationOpen: boolean;
-  onMobileNavigationToggle: () => void;
-}) => {
+export const AppBar = ({ user }: { user: UserDto }) => {
+  const pathname = usePathname();
+  const sectionTitle =
+    pathname === "/"
+      ? "Dashboard"
+      : pathname.startsWith("/stats")
+        ? "Estadísticas"
+        : pathname.startsWith("/localtube")
+          ? "LocalTube"
+          : pathname.startsWith("/gallery")
+            ? "Gallery"
+            : pathname.startsWith("/downloads")
+              ? "Descargas"
+              : pathname.startsWith("/users")
+                ? "Usuarios"
+                : "Home Server";
+
   return (
-    <header className="border-border bg-background/95 sticky top-0 z-20 flex h-[66px] items-center border-b px-4 backdrop-blur sm:px-7 lg:px-4">
-      <button
-        type="button"
-        aria-label={mobileNavigationOpen ? "Cerrar navegación" : "Abrir navegación"}
-        aria-expanded={mobileNavigationOpen}
-        aria-controls="mobile-main-navigation"
-        onClick={onMobileNavigationToggle}
-        className="hover:bg-muted focus-visible:ring-ring mr-2 grid size-10 place-items-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none lg:hidden"
-      >
-        {mobileNavigationOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-      </button>
-      <Link
-        aria-label="Home Server: ir al dashboard"
-        className="text-foreground flex min-w-0 items-center gap-2.5 text-lg font-bold tracking-tight"
-        href="/"
-      >
-        <span className="bg-primary text-primary-foreground grid size-8 place-items-center rounded-lg shadow-sm">
-          <Server aria-hidden="true" className="size-[18px]" />
-        </span>
-        <span className="truncate">Home Server</span>
-      </Link>
+    <header className="border-border bg-background/95 sticky top-0 z-20 flex h-16 items-center border-b backdrop-blur">
+      <div className="flex min-w-0 items-center gap-2 px-4">
+        <SidebarTrigger aria-label="Alternar menú lateral" className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <span className="text-foreground truncate text-[15px] font-semibold">{sectionTitle}</span>
+      </div>
 
-      <div className="ml-auto">
+      <div className="ml-auto px-3 sm:px-4">
         <UserMenu user={user} />
       </div>
     </header>
