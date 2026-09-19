@@ -8,6 +8,7 @@ import { UsersModule } from "./modules/users/users.module";
 import { LocalTubeModule } from "./modules/localtube/localtube.module";
 import { GalleryModule } from "./modules/gallery/gallery.module";
 import { DownloadsModule } from "./modules/downloads/downloads.module";
+import { FastModule } from "./modules/fast/fast.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DownloadsModule } from "./modules/downloads/downloads.module";
     LocalTubeModule,
     GalleryModule,
     DownloadsModule,
+    FastModule,
   ],
 })
 export class AppModule {}

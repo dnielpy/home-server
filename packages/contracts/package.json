@@ -32,6 +32,10 @@
     "./downloads": {
       "types": "./dist/downloads.d.ts",
       "default": "./dist/downloads.js"
+    },
+    "./fast": {
+      "types": "./dist/fast.d.ts",
+      "default": "./dist/fast.js"
     }
   },
   "scripts": {

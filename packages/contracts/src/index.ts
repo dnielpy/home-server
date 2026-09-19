@@ -4,3 +4,4 @@ export * from "./users";
 export * from "./localtube";
 export * from "./gallery";
 export * from "./downloads";
+export * from "./fast";

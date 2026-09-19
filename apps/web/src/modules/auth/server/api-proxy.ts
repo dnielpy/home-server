@@ -2,7 +2,15 @@ import "server-only";
 
 import { getSessionToken } from "@/src/modules/auth/server/session";
 
-const REQUEST_HEADERS = ["accept", "content-type", "content-length", "range", "x-file-name", "x-folder-name"];
+const REQUEST_HEADERS = [
+  "accept",
+  "content-type",
+  "content-length",
+  "range",
+  "cache-control",
+  "x-file-name",
+  "x-folder-name",
+];
 const RESPONSE_HEADERS = [
   "accept-ranges",
   "cache-control",
@@ -10,6 +18,9 @@ const RESPONSE_HEADERS = [
   "content-length",
   "content-range",
   "content-type",
+  "content-encoding",
+  "x-content-type-options",
+  "x-fast-bytes",
 ];
 
 export async function proxyAuthenticatedApi(request: Request, apiPath: string, includeBody = false) {

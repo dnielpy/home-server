@@ -2,6 +2,7 @@ const STATS_V1 = "/v1/stats";
 const LOCALTUBE_V1 = "/v1/localtube";
 const GALLERY_V1 = "/v1/gallery";
 const DOWNLOADS_V1 = "/v1/downloads";
+const FAST_V1 = "/v1/fast";
 
 export const API_ROUTES = {
   health: "/health",
@@ -23,4 +24,10 @@ export const API_ROUTES = {
     uploads: `${GALLERY_V1}/uploads`,
   },
   downloads: DOWNLOADS_V1,
+  fast: {
+    sessions: `${FAST_V1}/sessions`,
+    ping: `${FAST_V1}/ping`,
+    download: `${FAST_V1}/download`,
+    upload: `${FAST_V1}/upload`,
+  },
 } as const;

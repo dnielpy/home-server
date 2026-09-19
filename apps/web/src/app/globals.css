@@ -126,12 +126,27 @@
   }
 }
 
+.fast-pause-ring {
+  transform-origin: center;
+  animation: fast-pause-ring 1.2s linear infinite;
+}
+
+@keyframes fast-pause-ring {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .app-loading-bar__fill {
     transition: none;
   }
 
   .app-loading-bar__fill--indeterminate {
+    animation-duration: 2.5s;
+  }
+
+  .fast-pause-ring {
     animation-duration: 2.5s;
   }
 }
